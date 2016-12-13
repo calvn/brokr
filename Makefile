@@ -1,7 +1,7 @@
 TEST?=$(shell go list ./... | grep -v /vendor/)
 
 # Get git commit information
-GIT_COMMIT=$(shell git rev-parse HEAD)
+GIT_COMMIT=$(shell git rev-parse --short HEAD)
 GIT_DIRTY=$(shell test -n "`git status --porcelain`" && echo "+CHANGES" || true)
 
 default: test
@@ -26,7 +26,7 @@ build: generate
 	@echo " ==> Cleaning up old directory..."
 	@rm -rf bin && mkdir -p bin
 	@echo " ==> Building..."
-	@go build -o bin/brokr -ldflags "-X main.GitCommit=${GIT_COMMIT}${GIT_DIRTY}" .
+	@go build -ldflags "-X main.GitCommit=${GIT_COMMIT}${GIT_DIRTY}" -o bin/brokr .
 .PHONY: build
 
 build-linux: create-build-image remove-dangling build-native
