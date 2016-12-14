@@ -17,29 +17,19 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/calvn/brokr/config"
+	"github.com/calvn/brokr/brokr"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
-// initCmd represents the init command
-var initCmd = &cobra.Command{
-	Use:   "init",
-	Short: "Initialize .brokr.yaml",
-	Long:  `Initialize .brokr.yaml`,
+// quoteCmd represents the quote command
+var quoteCmd = &cobra.Command{
+	Use:   "quote",
+	Short: "Get quotes from a set of symbols",
+	Long: `Get quotes from a set of symbols.
+Example: brokr quote aapl googl`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// TODO: Work your own magic here
-		fmt.Println("init called")
+		if err := brokr.GetQuotes(args); err != nil {
+			fmt.Println(err)
+		}
 	},
-}
-
-func init() {
-	initCmd.Flags().StringVarP(&config.ConfigFile, "config", "c", "", "config file (default is $HOME/.brokr.yaml)")
-	initCmd.Flags().StringVarP(&config.AccessToken, "token", "t", "", "Access token obtained from Tradier")
-}
-
-func checkInit() {
-	if viper.ConfigFileUsed() == "" {
-		fmt.Println("[Warning] No config file found. Use `brokr init` to generate one.")
-	}
 }
