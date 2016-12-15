@@ -2,14 +2,23 @@ package config
 
 import "fmt"
 
+var (
+	DefaultConfigPath = "$HOME"
+	DefaultConfigName = ".brokr.yaml"
+)
+
 type Config struct {
-	Brokerage   string
-	AccessToken string
-	FilePath    string
+	AccessToken string `yaml:"access_token"`
 }
 
-func New() *Config {
-	config := &Config{}
+func New(token string) *Config {
+	config := &Config{
+		AccessToken: AccessToken,
+	}
+
+	if err := config.checkConfig(); err != nil {
+		return nil
+	}
 
 	return config
 }

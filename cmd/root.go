@@ -23,14 +23,13 @@ import (
 )
 
 var cfgFile string
-
 var RootCmd *cobra.Command
 
 func createRootCommand() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:   "brokr",
-		Short: "brokr brings your trades into the console",
-		Long: `brokr let's you place trades via the CLI.
+		Short: "brokr - bringing your trades into the console",
+		Long: `brokr let's you place trades via CLI commands.
   It currently supports making trades against Tradier.
 
 Made with ♥︎ in Golang.`,
@@ -42,25 +41,13 @@ Made with ♥︎ in Golang.`,
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
+	fmt.Println("init from root.go")
+	// cobra.OnInitialize(initConfig())
 
 	RootCmd = createRootCommand()
-	RootCmd.AddCommand(initCmd)
+	RootCmd.AddCommand(configCmd)
 	RootCmd.AddCommand(quoteCmd)
-}
 
-// initConfig reads in config file and ENV variables if set.
-func initConfig() {
-	if cfgFile != "" { // enable ability to specify config file via flag
-		viper.SetConfigFile(cfgFile)
-	}
-
-	viper.SetConfigName(".brokr") // name of config file (without extension)
-	viper.AddConfigPath("$HOME")  // adding home directory as first search path
-	viper.AutomaticEnv()          // read in environment variables that match
-
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
-	}
+	fmt.Println("access token from config: ", viper.GetString("access_token"))
+	fmt.Println("access token from struct: ", config.AccessToken)
 }

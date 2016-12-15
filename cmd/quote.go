@@ -28,6 +28,10 @@ var quoteCmd = &cobra.Command{
 	Long: `Get quotes from a set of symbols.
 Example: brokr quote aapl googl`,
 	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) == 0 {
+			return
+		}
+
 		if err := brokr.GetQuotes(args); err != nil {
 			fmt.Println(err)
 		}
