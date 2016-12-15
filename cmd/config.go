@@ -62,12 +62,8 @@ var configCmd = &cobra.Command{
 }
 
 func init() {
-	fmt.Println("init from config.go")
 	configCmd.Flags().StringVarP(&config.AccessToken, "token", "t", "", "Access token obtained from Tradier")
 	viper.BindPFlag("access_token", configCmd.Flags().Lookup("token"))
-
-	// fmt.Println("from config file: ", viper.GetString("access_token"))
-	// fmt.Println("from config struct:", config.AccessToken)
 
 	err := configCmd.MarkFlagRequired("token")
 	if err != nil {
