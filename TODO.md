@@ -2,13 +2,14 @@
 Laundry list
 
 ## config
-- [ ] Initialize config file
+- [x] Initialize config file
 - [ ] Merge existing config file
 - [ ] Merge flag, env, and config file settings in priority
 
 ## commands
-- [ ] subcommands should print help if no other values provided
-- [ ] version for more verbose info (e.g. go version, built time, os/arch)
+- [x] Subcommands should print help if no other values provided
+- [ ] Version for more verbose info (e.g. go version, built time, os/arch)
 
 ## cli behavior
-- [ ] interactive/continuous command
+- [ ] Interactive/continuous command
+- [ ] Better alternative to returning errors other that `fmt.Println()`
