@@ -16,39 +16,73 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
 
+	"github.com/calvn/brokr/brokr"
 	"github.com/calvn/brokr/config"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-var cfgFile string
+// The git commit that will be used to describe the version
+var (
+	GitCommit string
+
+	// Version of the program
+	Version = "0.0.1"
+)
+
 var RootCmd *cobra.Command
 
-func createRootCommand() *cobra.Command {
+var printVersion bool
+
+var brokrRunner *brokr.Runner
+var mergedConfig *config.Config
+
+func newRootCommand() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:   "brokr",
-		Short: "brokr - bringing your trades into the console",
-		Long: `brokr let's you place trades via CLI commands.
+		Short: "brokr - bringing your trades into the console.",
+		Long: `brokr - bringing your trades into the console.
   It currently supports making trades against Tradier.
 
 Made with ♥︎ in Golang.`,
-		Run: func(cmd *cobra.Command, args []string) {},
+		Run: rootCmdRunFunc,
 	}
 
-	rootCmd.Flags().BoolVarP(&config.PrintVersion, "version", "v", false, "print version and exit")
+	rootCmd.Flags().BoolVarP(&printVersion, "version", "v", false, "print version and exit")
 	return rootCmd
+}
+
+func rootCmdRunFunc(cmd *cobra.Command, args []string) {
+	// If no commands passed in, display help
+	if len(args) == 0 {
+		if err := cmd.Help(); err != nil {
+			fmt.Println(err)
+			os.Exit(0)
+		}
+	}
+
+	if printVersion {
+		fmt.Println("brokr:")
+		fmt.Printf("  %-9s%s\n", "Version:", Version)
+		if GitCommit != "" {
+			fmt.Printf("  %-9s%s\n", "Build:", GitCommit)
+		}
+	}
 }
 
 func init() {
 	// This gets run after all init()'s, but before any commands'
+	// NOTE: config should come before runner
 	cobra.OnInitialize(initConfig, setConfig)
 
-	RootCmd = createRootCommand()
-	RootCmd.AddCommand(configCmd)
+	RootCmd = newRootCommand()
+	RootCmd.AddCommand(newConfigCmd())
 	RootCmd.AddCommand(quoteCmd)
+	RootCmd.AddCommand(infoCmd)
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -58,16 +92,16 @@ func initConfig() {
 	viper.SetConfigName(configName)               // name of config file (without extension)
 	viper.AddConfigPath(config.DefaultConfigPath) // adding home directory as first search path
 	viper.AutomaticEnv()                          // read in environment variables that match
-
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
-	}
 }
 
 // setConfig sets config variables from viper variables
 func setConfig() {
 	if t := viper.GetString("access_token"); t != "" {
-		config.AccessToken = t
+		config.AccessTokenFlag = t
 	}
+}
+
+// initClient instantiates a new brokr client
+func initRunner() {
+	brokrRunner = brokr.NewRunner(mergedConfig)
 }

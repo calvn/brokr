@@ -18,21 +18,19 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
-// quoteCmd represents the quote command
-var quoteCmd = &cobra.Command{
-	Use:   "quote",
-	Short: "Get quotes from a set of symbols",
-	Long: `Get quotes from a set of symbols.
-Example: brokr quote aapl googl`,
+// infoCmd represents the info command
+var infoCmd = &cobra.Command{
+	Use:   "info",
+	Short: "Show information about brokr settings",
+	Long:  `Show information about brokr settings.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) == 0 {
-			return
-		}
 
-		if err := brokrRunner.GetQuotes(args); err != nil {
-			fmt.Println(err)
+		// If a config file is found, read it in.
+		if err := viper.ReadInConfig(); err == nil {
+			fmt.Println("Config file location:", viper.ConfigFileUsed())
 		}
 	},
 }

@@ -7,13 +7,14 @@ var (
 	DefaultConfigName = ".brokr.yaml"
 )
 
+// Config holds the merged configuration from the config file, environment variables, and flags
 type Config struct {
 	AccessToken string `yaml:"access_token"`
 }
 
 func New(token string) *Config {
 	config := &Config{
-		AccessToken: AccessToken,
+		AccessToken: token,
 	}
 
 	if err := config.checkConfig(); err != nil {

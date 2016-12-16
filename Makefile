@@ -26,7 +26,7 @@ build: generate
 	@echo " ==> Cleaning up old directory..."
 	@rm -rf bin && mkdir -p bin
 	@echo " ==> Building..."
-	@go build -ldflags "-X main.GitCommit=${GIT_COMMIT}${GIT_DIRTY}" -o bin/brokr .
+	@go build -ldflags "-X cmd.GitCommit=${GIT_COMMIT}${GIT_DIRTY}" -o bin/brokr .
 .PHONY: build
 
 build-linux: create-build-image remove-dangling build-native

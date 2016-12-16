@@ -27,52 +27,61 @@ import (
 	"github.com/spf13/viper"
 )
 
+var accessToken string
+
 // configCmd represents the config command
-var configCmd = &cobra.Command{
-	Use:   "config",
-	Short: "Configure .brokr.yaml",
-	Long:  `Configure .brokr.yaml`,
-	Run: func(cmd *cobra.Command, args []string) {
-		cfg := config.New(config.AccessToken)
-		if cfg == nil {
-			fmt.Println("Access token not provided")
-			return
-		}
+func newConfigCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "config",
+		Short: "Configure .brokr.yaml",
+		Long:  `Configure .brokr.yaml`,
+		Run:   configCmdFunc,
+	}
+	cmd.Flags().StringVarP(&accessToken, "token", "t", "", "Access token obtained from Tradier")
+	viper.BindPFlag("access_token", cmd.Flags().Lookup("token"))
 
-		data, err := yaml.Marshal(cfg)
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		home, err := homedir.Dir()
-		if err != nil {
-			return
-		}
-
-		filePath := filepath.Join(home, config.DefaultConfigName)
-
-		err = ioutil.WriteFile(filePath, data, 0644)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		fmt.Printf("Configuration written to %s\n", filePath)
-	},
-}
-
-func init() {
-	configCmd.Flags().StringVarP(&config.AccessToken, "token", "t", "", "Access token obtained from Tradier")
-	viper.BindPFlag("access_token", configCmd.Flags().Lookup("token"))
-
-	err := configCmd.MarkFlagRequired("token")
+	// FIXME: Doesn't work?
+	err := cmd.MarkFlagRequired("token")
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	return cmd
 }
 
-func checkInit() {
-	if viper.ConfigFileUsed() == "" {
-		fmt.Println("[Warning] No config file found. Use `brokr init` to generate one.")
+func configCmdFunc(cmd *cobra.Command, args []string) {
+	cfg := config.New(config.AccessTokenFlag)
+	if cfg == nil {
+		fmt.Println("Access token not provided")
+		return
+	}
+
+	data, err := yaml.Marshal(cfg)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	home, err := homedir.Dir()
+	if err != nil {
+		return
+	}
+
+	filePath := filepath.Join(home, config.DefaultConfigName)
+
+	err = ioutil.WriteFile(filePath, data, 0644)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Printf("Configuration written to %s\n", filePath)
+}
+
+// configInit initializes the MergedConfig object
+func configInit() {
+	mergedConfig = config.New(accessToken)
+
+	if mergedConfig.AccessToken == "" {
+		fmt.Println("[Warning] No access token provided")
 	}
 }
