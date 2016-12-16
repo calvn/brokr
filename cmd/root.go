@@ -58,7 +58,7 @@ Made with ♥︎ in Golang.`,
 
 func rootCmdRunFunc(cmd *cobra.Command, args []string) {
 	// If no commands passed in, display help
-	if len(args) == 0 {
+	if len(args) == 0 || !cmd.HasFlags() {
 		if err := cmd.Help(); err != nil {
 			fmt.Println(err)
 			os.Exit(0)
