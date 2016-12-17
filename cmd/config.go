@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
+	"strings"
 
 	"gopkg.in/yaml.v2"
 
@@ -28,6 +29,11 @@ import (
 )
 
 var accessToken string
+
+const (
+	defaultConfigPath = "$HOME"
+	defaultConfigName = ".brokr.yaml"
+)
 
 // configCmd represents the config command
 func newConfigCmd() *cobra.Command {
@@ -50,7 +56,7 @@ func newConfigCmd() *cobra.Command {
 }
 
 func configCmdFunc(cmd *cobra.Command, args []string) {
-	cfg := config.New(config.AccessTokenFlag)
+	cfg := config.New(accessToken)
 	if cfg == nil {
 		fmt.Println("Access token not provided")
 		return
@@ -66,7 +72,7 @@ func configCmdFunc(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	filePath := filepath.Join(home, config.DefaultConfigName)
+	filePath := filepath.Join(home, defaultConfigName)
 
 	err = ioutil.WriteFile(filePath, data, 0644)
 	if err != nil {
@@ -77,10 +83,21 @@ func configCmdFunc(cmd *cobra.Command, args []string) {
 	fmt.Printf("Configuration written to %s\n", filePath)
 }
 
-// configInit initializes the MergedConfig object
-func configInit() {
-	mergedConfig = config.New(accessToken)
+// initConfig reads in config file and ENV variables if set.
+func initConfig() {
+	configName := strings.TrimSuffix(defaultConfigName, filepath.Ext(defaultConfigName))
 
+	viper.SetConfigName(configName)        // name of config file (without extension)
+	viper.AddConfigPath(defaultConfigPath) // adding home directory as first search path
+	viper.ReadInConfig()                   // read in config
+	viper.AutomaticEnv()                   // read in environment variables that match
+}
+
+// setConfig sets config variables from viper variables
+func setConfig() {
+	t := viper.GetString("access_token")
+
+	mergedConfig = config.New(t)
 	if mergedConfig.AccessToken == "" {
 		fmt.Println("[Warning] No access token provided")
 	}

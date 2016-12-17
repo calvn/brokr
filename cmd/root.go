@@ -17,13 +17,10 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"path/filepath"
-	"strings"
 
 	"github.com/calvn/brokr/brokr"
 	"github.com/calvn/brokr/config"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 // The git commit that will be used to describe the version
@@ -76,29 +73,12 @@ func rootCmdRunFunc(cmd *cobra.Command, args []string) {
 
 func init() {
 	// This gets run after all init()'s, but before any commands'
-	// NOTE: config should come before runner
-	cobra.OnInitialize(initConfig, setConfig)
+	cobra.OnInitialize(initConfig, setConfig, initRunner)
 
 	RootCmd = newRootCommand()
 	RootCmd.AddCommand(newConfigCmd())
 	RootCmd.AddCommand(quoteCmd)
 	RootCmd.AddCommand(infoCmd)
-}
-
-// initConfig reads in config file and ENV variables if set.
-func initConfig() {
-	configName := strings.TrimSuffix(config.DefaultConfigName, filepath.Ext(config.DefaultConfigName))
-
-	viper.SetConfigName(configName)               // name of config file (without extension)
-	viper.AddConfigPath(config.DefaultConfigPath) // adding home directory as first search path
-	viper.AutomaticEnv()                          // read in environment variables that match
-}
-
-// setConfig sets config variables from viper variables
-func setConfig() {
-	if t := viper.GetString("access_token"); t != "" {
-		config.AccessTokenFlag = t
-	}
 }
 
 // initClient instantiates a new brokr client

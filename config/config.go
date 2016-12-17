@@ -2,11 +2,6 @@ package config
 
 import "fmt"
 
-var (
-	DefaultConfigPath = "$HOME"
-	DefaultConfigName = ".brokr.yaml"
-)
-
 // Config holds the merged configuration from the config file, environment variables, and flags
 type Config struct {
 	AccessToken string `yaml:"access_token"`
@@ -17,9 +12,10 @@ func New(token string) *Config {
 		AccessToken: token,
 	}
 
-	if err := config.checkConfig(); err != nil {
-		return nil
-	}
+	// NOTE: Should logic be performed in there , or handled upstream?
+	// if err := config.checkConfig(); err != nil {
+	// 	return nil
+	// }
 
 	return config
 }
