@@ -19,16 +19,9 @@ import (
 	"os"
 
 	"github.com/calvn/brokr/brokr"
+	"github.com/calvn/brokr/buildtime"
 	"github.com/calvn/brokr/config"
 	"github.com/spf13/cobra"
-)
-
-// The git commit that will be used to describe the version
-var (
-	GitCommit string
-
-	// Version of the program
-	Version = "0.0.1"
 )
 
 var RootCmd *cobra.Command
@@ -41,7 +34,7 @@ var mergedConfig *config.Config
 func newRootCommand() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:   "brokr",
-		Short: "brokr - bringing your trades into the console.",
+		Short: "brokr - bringing your trades into the console",
 		Long: `brokr - bringing your trades into the console.
   It currently supports making trades against Tradier.
 
@@ -64,9 +57,9 @@ func rootCmdRunFunc(cmd *cobra.Command, args []string) {
 
 	if printVersion {
 		fmt.Println("brokr:")
-		fmt.Printf("  %-9s%s\n", "Version:", Version)
-		if GitCommit != "" {
-			fmt.Printf("  %-9s%s\n", "Build:", GitCommit)
+		fmt.Printf("  %-9s%s\n", "Version:", buildtime.Version)
+		if buildtime.GitCommit != "" {
+			fmt.Printf("  %-9s%s\n", "Build:", buildtime.GitCommit)
 		}
 	}
 }
@@ -79,6 +72,7 @@ func init() {
 	RootCmd.AddCommand(newConfigCmd())
 	RootCmd.AddCommand(quoteCmd)
 	RootCmd.AddCommand(infoCmd)
+	RootCmd.AddCommand(versionCmd)
 }
 
 // initClient instantiates a new brokr client

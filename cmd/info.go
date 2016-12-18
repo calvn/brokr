@@ -25,7 +25,7 @@ import (
 var infoCmd = &cobra.Command{
 	Use:   "info",
 	Short: "Show information about brokr settings",
-	Long:  `Show information about brokr settings.`,
+	Long:  `Show information about brokr settings`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		// If a config file is found, read it in.
