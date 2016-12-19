@@ -5,7 +5,8 @@ Laundry list
 - [x] Initialize config file
 - [x] Merge existing config file
 - [x] Merge flag, env, and config file settings in priority
-- [ ] Properly use and load environment variables
+- [x] Properly use and load environment variables
+- [ ] BROKR_ACCESS_TOKEN should be globally available to be used for all commands that require auth
 
 #### defaults
 - [ ] Ability to set preview-order by default (set to false)
@@ -54,7 +55,7 @@ Laundry list
 
 ## commands
 - [x] Subcommands should print help if no other values provided
-- [ ] Version for more verbose info (e.g. go version, built time, os/arch)
+- [x] Version for more verbose info (e.g. go version, built time, os/arch)
 
 ## placing orders
 - [ ] Support for equities

@@ -38,29 +38,24 @@ const (
 // configCmd represents the config command
 func newConfigCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "config",
-		Short: "Configure .brokr.yaml",
-		Long:  `Configure .brokr.yaml`,
-		Run:   configCmdFunc,
+		Use:           "config",
+		Short:         "Configure .brokr.yaml",
+		Long:          `Configure .brokr.yaml`,
+		Run:           configCmdFunc,
+		PreRunE:       configPreRunEFunc,
+		SilenceErrors: true,
 	}
-	cmd.Flags().StringVarP(&accessToken, "token", "t", "", "Access token obtained from Tradier")
+	cmd.Flags().StringVarP(&accessToken, "token", "t", "", "Tradier access token, required")
 	viper.BindPFlag("access_token", cmd.Flags().Lookup("token"))
-
-	// FIXME: Doesn't work?
-	err := cmd.MarkFlagRequired("token")
-	if err != nil {
-		fmt.Println(err)
-	}
 
 	return cmd
 }
 
+// TODO: If config file exist, merge with it
 func configCmdFunc(cmd *cobra.Command, args []string) {
-	cfg := config.New(accessToken)
-	if cfg == nil {
-		fmt.Println("Access token not provided")
-		return
-	}
+	t := viper.GetString("access_token")
+
+	cfg := config.New(t)
 
 	data, err := yaml.Marshal(cfg)
 	if err != nil {
@@ -83,6 +78,18 @@ func configCmdFunc(cmd *cobra.Command, args []string) {
 	fmt.Printf("Configuration written to %s\n", filePath)
 }
 
+// Check for required flags, reads from viper
+func configPreRunEFunc(cmd *cobra.Command, args []string) error {
+	t := viper.GetString("access_token")
+	mergedConfig.AccessToken = t
+
+	if mergedConfig.AccessToken == "" {
+		return fmt.Errorf("No access token provided.")
+	}
+
+	return nil
+}
+
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
 	configName := strings.TrimSuffix(defaultConfigName, filepath.Ext(defaultConfigName))
@@ -90,15 +97,13 @@ func initConfig() {
 	viper.SetConfigName(configName)        // name of config file (without extension)
 	viper.AddConfigPath(defaultConfigPath) // adding home directory as first search path
 	viper.ReadInConfig()                   // read in config
+	viper.SetEnvPrefix("brokr")            // set env prefix
 	viper.AutomaticEnv()                   // read in environment variables that match
 }
 
-// setConfig sets config variables from viper variables
+// setConfig reads config from viper and instantiates mergedConfig, used for proceeding commands
 func setConfig() {
 	t := viper.GetString("access_token")
 
 	mergedConfig = config.New(t)
-	if mergedConfig.AccessToken == "" {
-		fmt.Println("[Warning] No access token provided")
-	}
 }

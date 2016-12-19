@@ -1,10 +1,10 @@
 TEST?=$(shell go list ./... | grep -v /vendor/)
 
 # Get git commit information
-BROKR_VERSION?=$(shell git describe --abbrev=0 --tags 2> /dev/null || echo 0.0.2)
+BROKR_VERSION?=$(shell git describe --abbrev=0 --tags 2> /dev/null || echo "0.0.0")
 GIT_COMMIT=$(shell git rev-parse --short HEAD)
 GIT_DIRTY=$(shell test -n "`git status --porcelain`" && echo "+CHANGES" || true)
-BUILD_DATE=$(shell date -u "+%a %b %T %Y")
+BUILD_DATE=$(shell date)
 
 default: test
 
