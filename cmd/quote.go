@@ -22,8 +22,9 @@ import (
 
 // quoteCmd represents the quote command
 var quoteCmd = &cobra.Command{
-	Use:   "quote",
-	Short: "Get quotes from a set of symbols",
+	Use:     "quote",
+	Aliases: []string{"q"},
+	Short:   "Get quotes from a set of symbols",
 	Long: `Get quotes from a set of symbols.
 Example: brokr quote aapl googl`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -31,7 +32,7 @@ Example: brokr quote aapl googl`,
 			return
 		}
 
-		if err := brokrRunner.GetQuotes(args); err != nil {
+		if err := (*brokrRunner.Brokerage).GetQuotes(args); err != nil {
 			fmt.Println(err)
 		}
 	},

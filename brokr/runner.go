@@ -7,8 +7,8 @@ import (
 )
 
 type Runner struct {
-	client *tradier.Client
-	config *config.Config
+	Brokerage *Brokerage
+	config    *config.Config
 }
 
 func NewRunner(config *config.Config) *Runner {
@@ -19,9 +19,18 @@ func NewRunner(config *config.Config) *Runner {
 	oauthClient := oauth2.NewClient(oauth2.NoContext, tokenSource)
 	tradierClient := tradier.NewClient(oauthClient)
 
-	r := &Runner{
+	// brokerage := Brokerage(&TradierBrokerage{
+	// 	client: tradierClient,
+	// })
+
+	var brokerage Brokerage
+	brokerage = &TradierBrokerage{
 		client: tradierClient,
-		config: config,
+	}
+
+	r := &Runner{
+		Brokerage: &brokerage,
+		config:    config,
 	}
 
 	return r
