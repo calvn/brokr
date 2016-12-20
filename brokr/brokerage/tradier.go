@@ -1,7 +1,8 @@
-package brokr
+package brokerage
 
 import (
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/calvn/go-tradier/tradier"
@@ -9,6 +10,14 @@ import (
 
 type TradierBrokerage struct {
 	client *tradier.Client
+}
+
+func NewTradierBrokerage(httpClient *http.Client) *TradierBrokerage {
+	client := tradier.NewClient(httpClient)
+
+	return &TradierBrokerage{
+		client: client,
+	}
 }
 
 func (b *TradierBrokerage) GetQuotes(symbols []string) error {
@@ -29,4 +38,8 @@ func (b *TradierBrokerage) GetQuotes(symbols []string) error {
 	}
 
 	return nil
+}
+
+func (b *TradierBrokerage) Name() string {
+	return "Tradier"
 }
