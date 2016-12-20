@@ -53,8 +53,6 @@ func newConfigCmd() *cobra.Command {
 
 // TODO: If config file exist, merge with it
 func configCmdFunc(cmd *cobra.Command, args []string) {
-	t := viper.GetString("access_token")
-
 	cfg := config.New(viper.GetViper())
 
 	data, err := yaml.Marshal(cfg)
@@ -103,7 +101,7 @@ func initConfig() {
 
 // setConfig reads config from viper and instantiates mergedConfig, used for proceeding commands
 func setConfig() {
-	t := viper.GetString("access_token")
-
-	mergedConfig = config.New(t)
+	viper.SetDefault("brokerage", "tradier")
+	v := viper.GetViper()
+	mergedConfig = config.New(v)
 }

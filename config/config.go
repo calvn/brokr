@@ -15,6 +15,7 @@ type Config struct {
 // Create a new config from Viper object
 func New(v *viper.Viper) *Config {
 	config := &Config{
+		Brokerage:   v.GetString("brokerage"),
 		AccessToken: v.GetString("access_token"),
 	}
 
@@ -26,9 +27,13 @@ func New(v *viper.Viper) *Config {
 	return config
 }
 
-func (c *Config) checkConfig() error {
+func (c *Config) CheckConfig() error {
+	if len(c.Brokerage) == 0 {
+		return fmt.Errorf("config error: brokerage not provided")
+	}
+
 	if len(c.AccessToken) == 0 {
-		return fmt.Errorf("config error: access token not provided in config file")
+		return fmt.Errorf("config error: access token not provided")
 	}
 
 	return nil
