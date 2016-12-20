@@ -7,7 +7,7 @@ import (
 )
 
 type Runner struct {
-	Brokerage *Brokerage
+	brokerage *Brokerage
 	config    *config.Config
 }
 
@@ -17,19 +17,17 @@ func NewRunner(config *config.Config) *Runner {
 	)
 
 	oauthClient := oauth2.NewClient(oauth2.NoContext, tokenSource)
-	tradierClient := tradier.NewClient(oauthClient)
+	bClient := tradier.NewClient(oauthClient)
 
-	// brokerage := Brokerage(&TradierBrokerage{
-	// 	client: tradierClient,
-	// })
-
+	// TODO: Init client based on config
+	// Currently defaults to Tradier, the only supported brokerage
 	var brokerage Brokerage
 	brokerage = &TradierBrokerage{
-		client: tradierClient,
+		client: bClient,
 	}
 
 	r := &Runner{
-		Brokerage: &brokerage,
+		brokerage: &brokerage,
 		config:    config,
 	}
 

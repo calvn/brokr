@@ -32,7 +32,7 @@ Example: brokr quote aapl googl`,
 			return
 		}
 
-		if err := (*brokrRunner.Brokerage).GetQuotes(args); err != nil {
+		if err := brokrRunner.GetQuotes(args); err != nil {
 			fmt.Println(err)
 		}
 	},
