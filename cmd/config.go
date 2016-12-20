@@ -55,7 +55,7 @@ func newConfigCmd() *cobra.Command {
 func configCmdFunc(cmd *cobra.Command, args []string) {
 	t := viper.GetString("access_token")
 
-	cfg := config.New(t)
+	cfg := config.New(viper.GetViper())
 
 	data, err := yaml.Marshal(cfg)
 	if err != nil {

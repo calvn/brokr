@@ -1,9 +1,8 @@
 package brokr
 
 import (
-	"github.com/calvn/brokr/brokr/brokerage"
+	"github.com/calvn/brokr/brokerage"
 	"github.com/calvn/brokr/config"
-	"golang.org/x/oauth2"
 )
 
 type Runner struct {
@@ -12,19 +11,12 @@ type Runner struct {
 }
 
 func NewRunner(config *config.Config) *Runner {
-	tokenSource := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: config.AccessToken},
-	)
-
-	oauthClient := oauth2.NewClient(oauth2.NoContext, tokenSource)
-
 	// TODO: Init client based on config
 	// Currently defaults to Tradier, the only supported brokerage
-	var b brokerage.Brokerage
-	b = brokerage.NewTradierBrokerage(oauthClient)
+	b := brokerage.New(config)
 
 	r := &Runner{
-		brokerage: &b,
+		brokerage: b,
 		config:    config,
 	}
 
