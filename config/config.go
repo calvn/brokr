@@ -1,15 +1,22 @@
 package config
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/spf13/viper"
+)
 
 // Config holds the merged configuration from the config file, environment variables, and flags
 type Config struct {
+	Brokerage   string `yaml:"brokerage"`
 	AccessToken string `yaml:"access_token"`
 }
 
-func New(token string) *Config {
+// Create a new config from Viper object
+func New(v *viper.Viper) *Config {
 	config := &Config{
-		AccessToken: token,
+		Brokerage:   v.GetString("brokerage"),
+		AccessToken: v.GetString("access_token"),
 	}
 
 	// NOTE: Should logic be performed in there , or handled upstream?
@@ -20,9 +27,13 @@ func New(token string) *Config {
 	return config
 }
 
-func (c *Config) checkConfig() error {
+func (c *Config) CheckConfig() error {
+	if len(c.Brokerage) == 0 {
+		return fmt.Errorf("config error: brokerage not provided")
+	}
+
 	if len(c.AccessToken) == 0 {
-		return fmt.Errorf("config error: access token not provided in config file")
+		return fmt.Errorf("config error: access token not provided")
 	}
 
 	return nil

@@ -29,10 +29,9 @@ var infoCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		// If a config file is found, read it in.
-		if err := viper.ReadInConfig(); err == nil {
-			fmt.Printf(`brokr infomation:
+		fmt.Printf(`brokr infomation:
   Brokerage:   %s
-  Config file: %s`, brokrRunner.Brokerage(), viper.ConfigFileUsed())
-		}
+  Config file: %s
+`, brokrRunner.Brokerage(), viper.ConfigFileUsed())
 	},
 }
