@@ -9,7 +9,7 @@ Laundry list
 - [ ] BROKR_ACCESS_TOKEN should be globally available to be used for all commands that require auth
 
 #### defaults
-- [ ] Ability to set preview-order by default (set to false)
+- [ ] Ability to toggle preview-order (default should be set to true)
 - [ ] Attempt to set default account if there is only one account number
 - [ ] Set sane defaults for placing orders
   - [ ] Day expiry by default
@@ -87,7 +87,6 @@ Laundry list
 
 `$ brokr short aapl stop 120 limit 100`
 > short 100 shares of aapl with stop at $120 and limit at $100
-
 
 `$ brokr open buy 100 AAPL161223C00115000`
 > Single-leg order: buy-to-open 100 AAPL 115@Dec-23-2016 call contracts

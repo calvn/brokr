@@ -20,20 +20,25 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// quoteCmd represents the quote command
-var quoteCmd = &cobra.Command{
-	Use:     "quote",
-	Aliases: []string{"q"},
-	Short:   "Get quotes from a set of symbols",
-	Long: `Get quotes from a set of symbols.
-Example: brokr quote aapl googl`,
-	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) == 0 {
-			return
-		}
+func newQuoteCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "quote",
+		Aliases: []string{"q"},
+		Short:   "Get quotes from a set of symbols",
+		Long: `Get quotes from a set of symbols.
+	Example: brokr quote aapl googl`,
+		Run: quoteCmdFunc,
+	}
 
-		if err := brokrRunner.GetQuotes(args); err != nil {
-			fmt.Println(err)
-		}
-	},
+	return cmd
+}
+
+func quoteCmdFunc(cmd *cobra.Command, args []string) {
+	if len(args) == 0 {
+		return
+	}
+
+	if err := brokrRunner.GetQuotes(args); err != nil {
+		fmt.Println(err)
+	}
 }

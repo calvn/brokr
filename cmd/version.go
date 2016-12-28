@@ -40,12 +40,15 @@ var versionTemplate = `brokr:
   Built:      {{.BuildDate}}
 `
 
-// versionCmd represents the version command
-var versionCmd = &cobra.Command{
-	Use:   "version",
-	Short: "Display detailed brokr version information",
-	Long:  `Display detailed brokr version information`,
-	Run:   versionCmdFunc,
+func newVersionCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "version",
+		Short: "Display detailed brokr version information",
+		Long:  `Display detailed brokr version information`,
+		Run:   versionCmdFunc,
+	}
+
+	return cmd
 }
 
 func versionCmdFunc(cmd *cobra.Command, args []string) {

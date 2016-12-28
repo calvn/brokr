@@ -70,9 +70,10 @@ func init() {
 
 	RootCmd = newRootCommand()
 	RootCmd.AddCommand(newConfigCmd())
-	RootCmd.AddCommand(quoteCmd)
-	RootCmd.AddCommand(infoCmd)
-	RootCmd.AddCommand(versionCmd)
+	RootCmd.AddCommand(newQuoteCmd())
+	RootCmd.AddCommand(newBuyCmd())
+	RootCmd.AddCommand(newInfoCmd())
+	RootCmd.AddCommand(newVersionCmd())
 }
 
 // initClient instantiates a new brokr client

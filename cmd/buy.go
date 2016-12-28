@@ -21,22 +21,21 @@ import (
 	"github.com/spf13/viper"
 )
 
-func newInfoCmd() *cobra.Command {
+var previewFlag bool
+
+func newBuyCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "info",
-		Short: "Show information about brokr settings",
-		Long:  `Show information about brokr settings`,
-		Run:   infoCmdFunc,
+		Use:   "buy",
+		Short: "Preview  or place a buy order",
+		Long:  `Preview  or place a buy order`,
+		Run:   buyCmdFunc,
 	}
+	cmd.Flags().BoolVarP(&previewFlag, "preview", "p", true, "Preview order, default: true")
+	viper.BindPFlag("preview_order", cmd.Flags().Lookup("preview"))
 
 	return cmd
 }
 
-func infoCmdFunc(cmd *cobra.Command, args []string) {
-	// If a config file is found, read it in.
-	fmt.Printf(`brokr infomation:
-Brokerage:   %s
-Config file: %s
-`,
-		brokrRunner.Brokerage(), viper.ConfigFileUsed())
+func buyCmdFunc(cmd *cobra.Command, args []string) {
+	fmt.Println("this is the buy command")
 }
