@@ -1,5 +1,6 @@
 package tradier
 
+// All returns all watchlists for the user.
 func (s *WatchlistsService) All() (*Watchlists, *Response, error) {
 	req, err := s.client.NewRequest("GET", "watchlists", nil)
 	if err != nil {

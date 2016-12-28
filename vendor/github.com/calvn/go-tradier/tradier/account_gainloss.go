@@ -2,7 +2,8 @@ package tradier
 
 import "fmt"
 
-func (s *AccountService) GainLoss(accountId string) (*Account, *Response, error) {
-	u := fmt.Sprintf("accounts/%s/gainloss", accountId)
-	return s.AccountRequest(u)
+// GainLoss returns the account's cost basis for accountID.
+func (s *AccountService) GainLoss(accountID string) (*Account, *Response, error) {
+	u := fmt.Sprintf("accounts/%s/gainloss", accountID)
+	return s.accountRequest(u)
 }

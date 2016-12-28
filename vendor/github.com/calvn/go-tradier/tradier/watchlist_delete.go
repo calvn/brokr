@@ -2,8 +2,9 @@ package tradier
 
 import "fmt"
 
-func (s *WatchlistsService) Delete(watchlistId string) (*Watchlists, *Response, error) {
-	u := fmt.Sprintf("watclists/%s", watchlistId)
+// Delete sends an watchlist deletion request.
+func (s *WatchlistsService) Delete(watchlistID string) (*Watchlists, *Response, error) {
+	u := fmt.Sprintf("watclists/%s", watchlistID)
 
 	req, err := s.client.NewRequest("DELETE", u, nil)
 	if err != nil {

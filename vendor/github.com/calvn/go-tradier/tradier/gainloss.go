@@ -5,12 +5,14 @@ import (
 	"time"
 )
 
+// GainLoss represents the gainloss object.
 type GainLoss struct {
 	ClosedPosition []ClosedPosition `json:"closed_position,omitempty"`
 }
 
 type gainLoss GainLoss
 
+// ClosedPosition represents the closed_position object.
 type ClosedPosition struct {
 	ClosedDate      *time.Time `json:"close_date,omitempty"`
 	Cost            *float64   `json:"cost,omitempty"`
@@ -27,6 +29,7 @@ type closedPosition struct {
 	*ClosedPosition `json:"closed_position,omitempty"`
 }
 
+// UnmarshalJSON unmarshals gain_loss into GainLoss object.
 func (g *GainLoss) UnmarshalJSON(b []byte) (err error) {
 	gainLossStr := ""
 	gainLossObj := gainLoss{}
@@ -54,6 +57,7 @@ func (g *GainLoss) UnmarshalJSON(b []byte) (err error) {
 	return nil
 }
 
+// MarshalJSON marshals GrainLoss into its JSON representation.
 func (g *GainLoss) MarshalJSON() ([]byte, error) {
 	// If []ClosedPosition is empty
 	if len(g.ClosedPosition) == 0 {

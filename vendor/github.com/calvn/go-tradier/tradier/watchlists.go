@@ -2,10 +2,14 @@ package tradier
 
 import "encoding/json"
 
+// WatchlistsService handles routes related to watchlists
+// from the Tradier API.
 type WatchlistsService service
 
+// Watchlists represents the watchlists JSON object.
 type Watchlists []*Watchlist
 
+// Watchlist represents the watchlist JSON object.
 type Watchlist struct {
 	Name      *string `json:"name,omitempty"`
 	ID        *string `json:"id,omitempty"`
@@ -16,12 +20,14 @@ type Watchlist struct {
 
 type watchlist Watchlist
 
+// Items represents the items JSON object.
 type Items struct {
 	Item []*WatchlistItem `json:"item,omitempty"`
 }
 
 type items Items
 
+// WatchlistItem represents the item JSON object from the watclist item collection.
 type WatchlistItem struct {
 	Symbol *string `json:"symbol,omitempty"`
 	ID     *string `json:"id,omitempty"`
@@ -31,6 +37,7 @@ type watchlistItem struct {
 	*WatchlistItem `json:"item,omitempty"`
 }
 
+// UnmarshalJSON unmarshals items into Items object.
 func (i *Items) UnmarshalJSON(b []byte) error {
 	itemsStr := ""
 	itemsObj := items{}
@@ -59,6 +66,7 @@ func (i *Items) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// MarshalJSON marshals Items into its JSON representation.
 func (i *Items) MarshalJSON() ([]byte, error) {
 	if len(i.Item) == 0 {
 		return json.Marshal("null")
@@ -73,7 +81,7 @@ func (i *Items) MarshalJSON() ([]byte, error) {
 	return json.Marshal(*i)
 }
 
-// Unmarshal json into Watchlist object
+// UnmarshalJSON unmarshals watchlist into Watchlist object.
 func (w *Watchlist) UnmarshalJSON(b []byte) error {
 	var wlc struct {
 		*watchlist `json:"watchlist,omitempty"`
@@ -97,6 +105,7 @@ func (w *Watchlist) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// MarshalJSON marshals Watchlist into its JSON representation.
 func (w *Watchlist) MarshalJSON() ([]byte, error) {
 	if w.unwrapped {
 		return json.Marshal(*w)
@@ -107,6 +116,7 @@ func (w *Watchlist) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// UnmarshalJSON unmarshals watchlists into Watchlists object.
 func (w *Watchlists) UnmarshalJSON(b []byte) error {
 	var wlc struct {
 		W struct {
@@ -141,6 +151,7 @@ func (w *Watchlists) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// MarshalJSON marshals Watchlists into its JSON representation.
 func (w *Watchlists) MarshalJSON() ([]byte, error) {
 	// Set wrapped to true to marshal differently
 	for _, wl := range *w {

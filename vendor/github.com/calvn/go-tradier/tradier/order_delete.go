@@ -2,8 +2,9 @@ package tradier
 
 import "fmt"
 
-func (s *OrderService) Delete(accountId, orderId string) (*Orders, *Response, error) {
-	u := fmt.Sprintf("accounts/%s/orders/%s", accountId, orderId)
+// Delete sends an order deletion/cancellation request.
+func (s *OrderService) Delete(accountID, orderID string) (*Orders, *Response, error) {
+	u := fmt.Sprintf("accounts/%s/orders/%s", accountID, orderID)
 
 	req, err := s.client.NewRequest("DELETE", u, nil)
 	if err != nil {

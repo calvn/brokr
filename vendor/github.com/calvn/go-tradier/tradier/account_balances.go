@@ -2,7 +2,8 @@ package tradier
 
 import "fmt"
 
-func (s *AccountService) Balances(accountId string) (*Account, *Response, error) {
-	u := fmt.Sprintf("accounts/%s/balances", accountId)
-	return s.AccountRequest(u)
+// Balances returns the account's balance for clientID.
+func (s *AccountService) Balances(accountID string) (*Account, *Response, error) {
+	u := fmt.Sprintf("accounts/%s/balances", accountID)
+	return s.accountRequest(u)
 }

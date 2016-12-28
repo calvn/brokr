@@ -17,7 +17,7 @@ const (
 	userAgent      = "go-tradier/" + libraryVersion
 )
 
-// Client takes care of managing communication to the Tradier api
+// Client takes care of managing communication to the Tradier API.
 type Client struct {
 	clientMu sync.Mutex
 	client   *http.Client
@@ -32,13 +32,15 @@ type Client struct {
 	Account    *AccountService
 	Order      *OrderService
 	Watchlists *WatchlistsService
-	Quotes     *QuotesService
+	Markets    *MarketsService
 }
 
 type service struct {
 	client *Client
 }
 
+// NewClient creates a new Tradier API client.
+// To use API methods that require authentication, an http.Client that performs proper authentication must be provided, such as one created with the golang.org/x/oauth2 library.
 func NewClient(httpClient *http.Client) *Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
@@ -57,11 +59,12 @@ func NewClient(httpClient *http.Client) *Client {
 	c.Account = (*AccountService)(&c.common) // FIXME: should be AccountsService
 	c.Order = (*OrderService)(&c.common)     // FIXME: should be OrdersService
 	c.Watchlists = (*WatchlistsService)(&c.common)
-	c.Quotes = (*QuotesService)(&c.common)
+	c.Markets = (*MarketsService)(&c.common)
 
 	return c
 }
 
+// NewRequest creates an API request.
 func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Request, error) {
 	rel, err := url.Parse(urlStr)
 	if err != nil {
@@ -94,6 +97,7 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 	return req, nil
 }
 
+// Response is the Tradier API response. It wraps the standard http.Response from Traider along with rate limits from the header so that it can be more easily accessed
 type Response struct {
 	*http.Response
 	// Rate
@@ -105,6 +109,7 @@ func newResponse(r *http.Response) *Response {
 	return response
 }
 
+// Do sends an API request and returns the response. It accepts an empty interface{} used to unmarshal the response into that object instance.
 func (c *Client) Do(req *http.Request, v interface{}) (*Response, error) {
 	// TODO: Do rate limit checking
 
@@ -175,4 +180,6 @@ func Int64(v int64) *int64 { return &v }
 // to store v and returns a pointer to it.
 func String(v string) *string { return &v }
 
+// Float64 is a helper routine that allocates a new float64 value
+// to store v and returns a pointer to it.
 func Float64(v float64) *float64 { return &v }

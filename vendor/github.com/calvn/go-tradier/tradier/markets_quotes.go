@@ -6,7 +6,8 @@ import (
 	"strings"
 )
 
-func (s *QuotesService) Get(symbols []string) (*Quotes, *Response, error) {
+// Quotes returns the quotes for a set of symbols.
+func (s *MarketsService) Quotes(symbols []string) (*Quotes, *Response, error) {
 	symbls := strings.Join(symbols, ",")
 
 	v := url.Values{}

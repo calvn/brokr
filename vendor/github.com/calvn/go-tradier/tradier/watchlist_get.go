@@ -2,8 +2,9 @@ package tradier
 
 import "fmt"
 
-func (s *WatchlistsService) Get(watchlistId string) (*Watchlist, *Response, error) {
-	u := fmt.Sprintf("watchlists/%s", watchlistId)
+// Get returns the watchlist for watchlistID.
+func (s *WatchlistsService) Get(watchlistID string) (*Watchlist, *Response, error) {
+	u := fmt.Sprintf("watchlists/%s", watchlistID)
 
 	req, err := s.client.NewRequest("GET", u, nil)
 	if err != nil {

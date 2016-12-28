@@ -1,0 +1,11 @@
+package: github.com/calvn/brokr
+import:
+- package: github.com/alecthomas/template
+- package: github.com/calvn/go-tradier
+  subpackages:
+  - tradier
+- package: github.com/mitchellh/go-homedir
+- package: github.com/spf13/cobra
+- package: github.com/spf13/viper
+- package: golang.org/x/oauth2
+- package: gopkg.in/yaml.v2
