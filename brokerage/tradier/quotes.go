@@ -6,7 +6,7 @@ import (
 )
 
 func (b *TradierBrokerage) GetQuotes(symbols []string) error {
-	quotes, _, err := b.client.Quotes.Get(symbols)
+	quotes, _, err := b.client.Markets.Quotes(symbols)
 	if err != nil {
 		return err
 	}

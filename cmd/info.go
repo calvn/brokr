@@ -35,8 +35,8 @@ func newInfoCmd() *cobra.Command {
 func infoCmdFunc(cmd *cobra.Command, args []string) {
 	// If a config file is found, read it in.
 	fmt.Printf(`brokr infomation:
-Brokerage:   %s
-Config file: %s
+Brokerage:       %s
+Config file:     %s
 `,
-		brokrRunner.Brokerage(), viper.ConfigFileUsed())
+		brokrRunner.Name(), viper.ConfigFileUsed())
 }

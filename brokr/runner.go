@@ -6,8 +6,8 @@ import (
 )
 
 type Runner struct {
-	brokerage *brokerage.Brokerage
-	config    *config.Config
+	brokerage.Brokerage
+	config *config.Config
 }
 
 // NewRunner create a new instance of Runner with the provided configuration
@@ -16,17 +16,9 @@ func NewRunner(config *config.Config) *Runner {
 	// Currently defaults to Tradier, the only supported brokerage
 	b := brokerage.New(config)
 
-	r := &Runner{
-		brokerage: b,
-		config:    config,
-	}
+	r := &Runner{*b, config}
 
 	return r
-}
-
-// Brokerage returns the brokerage name that is being used by the runner
-func (r *Runner) Brokerage() string {
-	return (*r.brokerage).Name()
 }
 
 // Config returns the runner's config.Config

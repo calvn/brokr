@@ -9,10 +9,12 @@ import (
 type Brokerage interface {
 	Name() string
 	GetQuotes([]string) error
+	PlaceOrder(string, string, string, string, int, string, float64) ([]string, error) // class, symbol, duration, side, amount, type, limit/stop price
 }
 
 func New(config *config.Config) *Brokerage {
 	var b Brokerage
+
 	switch config.Brokerage {
 	case "tradier":
 		tokenSource := oauth2.StaticTokenSource(
@@ -20,9 +22,6 @@ func New(config *config.Config) *Brokerage {
 		)
 
 		oauthClient := oauth2.NewClient(oauth2.NoContext, tokenSource)
-
-		// TODO: Init client based on config
-		// Currently defaults to Tradier, the only supported brokerage
 		b = tradier.NewTradierBrokerage(oauthClient)
 	}
 

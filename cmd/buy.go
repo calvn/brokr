@@ -16,26 +16,71 @@ package cmd
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-var previewFlag bool
+var (
+	previewFlag  bool
+	durationFlag string
+)
 
 func newBuyCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "buy",
+		Use:   "buy QUANTITY SYMBOL",
 		Short: "Preview  or place a buy order",
 		Long:  `Preview  or place a buy order`,
 		Run:   buyCmdFunc,
 	}
 	cmd.Flags().BoolVarP(&previewFlag, "preview", "p", true, "Preview order, default: true")
+	cmd.Flags().StringVarP(&durationFlag, "duration", "d", "day", "Duration of the order, default: day")
 	viper.BindPFlag("preview_order", cmd.Flags().Lookup("preview"))
 
 	return cmd
 }
 
 func buyCmdFunc(cmd *cobra.Command, args []string) {
-	fmt.Println("this is the buy command")
+	if len(args) < 2 {
+		fmt.Println("Invalid buy command")
+		return
+	}
+
+	// Quantity
+	q, err := strconv.Atoi(args[0])
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// Symbol
+	symbol := args[1]
+	if len(symbol) == 0 {
+		fmt.Println("Cannot provide empty symbol")
+	}
+
+	// Type and trigger price
+	orderType := "market"
+	triggerPrice := 0.0
+	if len(args) == 4 {
+		switch args[2] {
+		case "limit":
+			orderType = "limit"
+		case "stop":
+			orderType = "stop"
+		}
+
+		triggerPrice, _ = strconv.ParseFloat(args[3], 64)
+	}
+
+	ids, err := brokrRunner.PlaceOrder("equity", symbol, durationFlag, "buy", q, orderType, triggerPrice)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	output := strings.Join(ids, " ")
+	fmt.Printf("Order IDs: %s\n", output)
 }

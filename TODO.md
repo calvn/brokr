@@ -61,9 +61,12 @@ Laundry list
 - [ ] Support for equities
 - [ ] Support for single-leg options
 - [ ] Support for multi-leg options
-- [ ] Provide subcommand flags for overwriting defaults
+- [ ] Provide subcommand flags for overwriting defaults (global)
   - [ ] `--duration={day,gtc}`, `-d`
   - [ ] `--preview={true,false}`, `-p`
+- [ ] Ability to convert a short to sell if there is a position
+- [ ] Ability to close a position regardless of side
+- [ ] Ability to place limit and stop based on '>' '<'
 
 - [ ] Order commands
   - [ ] equities
@@ -76,29 +79,40 @@ Laundry list
     - [ ] close sell - cs
     - [ ] open sell - os
     - [ ] close buy - cb
+  - [ ] close
 
 #### Example:
 
-`$ brokr buy 100 appl limit 120`
+`$ brokr buy 100 appl limit 120` or `$ brokr buy 100 aapl < 120`
 > buy 100 shares of AAPL with limit set at $120, day duration
 
 `$ brokr b 100 aapl l 120`
 > potentially provide the ability to shorten command
 
+`$ brokr sell 100 appl limit 120`
+> buy 100 shares of AAPL with limit set at $120, day duration
+
+`$ brokr s 100 aapl l 120`
+> potentially provide the ability to shorten command
+
 `$ brokr short aapl stop 120 limit 100`
 > short 100 shares of aapl with stop at $120 and limit at $100
 
-`$ brokr open buy 100 AAPL161223C00115000`
+`$ brokr buy open 100 AAPL161223C00115000`
 > Single-leg order: buy-to-open 100 AAPL 115@Dec-23-2016 call contracts
 
-`$ brokr ob AAPL161223C00115000`
+`$ brokr bo AAPL161223C00115000`
 > shorter command
 
-`$ brokr close sell aapl@115 161223`
+`$ brokr sell close aapl@115 161223`
 > potentially make it easier to place options orders without knowing options symbol
 
-`$ brokr open buy 100 CSCO150117C00035000 open sell 100 CSCO140118C00008000`
+`$ brokr buy open 100 CSCO150117C00035000 sell open 100 CSCO140118C00008000`
 > Multi-leg order: buy-to-open 100 CSCO 35@Jan-17-2015 call contracts and sell-to-open 100 CSCO 35@Jan-18-2014 call contracts
+
+`$ brokr close aapl` or `$brokr c aapl` Limit/Stop: `$ brokr close aapl limit 100`
+> Close all AAPL positions (excluding options)
+
 
 ***Note:*** *`open/close`comes before `buy/sell` to explicitly differentiate an option order from an equity order*
 
@@ -106,7 +120,7 @@ Should there be only buy/sell on orders? For instance, *sell short* turns into *
 
 ## cli behavior
 - [ ] Interactive/continuous command
-- [ ] Better alternative for returning errors other that `fmt.Println()`
+- [ ] Better alternative for returning errors other that `fmt.Println()`, better error handling
 
 ## docs
 - [ ] Write up docs for usage

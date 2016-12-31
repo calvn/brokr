@@ -156,12 +156,13 @@ func checkResponse(r *http.Response) error {
 		return err
 	}
 
+	// NOTE: The switch is to stuff error information into an ErrorResponse struct, yet to be implemented
 	switch {
 	case r.StatusCode == http.StatusUnauthorized:
 		return fmt.Errorf("%s", data)
 	}
 
-	return nil
+	return fmt.Errorf("%s", data)
 }
 
 // Bool is a helper routine that allocates a new bool value

@@ -6,7 +6,7 @@ imports:
   subpackages:
   - parse
 - name: github.com/calvn/go-tradier
-  version: fbcff6b7bd659f2250884c8f1eb87ca560f413cd
+  version: 62433d40b11e113d79cfe518b7051a8f1a69b737
   subpackages:
   - tradier
 - name: github.com/fsnotify/fsnotify
