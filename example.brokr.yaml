@@ -1,0 +1,6 @@
+brokerage: tradier
+preview_order: true
+
+tradier:
+  account: 00Y0000
+  token: ABC000000000000

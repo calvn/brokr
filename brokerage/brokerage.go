@@ -9,7 +9,10 @@ import (
 type Brokerage interface {
 	Name() string
 	GetQuotes([]string) error
+	GetPositions() error
+	GetOrders() error
 	PlaceOrder(string, string, string, string, int, string, float64) ([]string, error) // class, symbol, duration, side, amount, type, limit/stop price
+	CancelOrder([]string) error
 }
 
 func New(config *config.Config) *Brokerage {

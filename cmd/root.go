@@ -24,6 +24,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// RootCmd is the entrypoint for the CLI, exported and used in main.go.
 var RootCmd *cobra.Command
 
 var printVersion bool
@@ -38,11 +39,11 @@ func newRootCommand() *cobra.Command {
 		Long: `brokr - bringing your trades into the console.
   It currently supports making trades against Tradier.
 
-Made with ♥︎ in Golang.`,
+Made with ♥︎ in Go.`,
 		Run: rootCmdRunFunc,
 	}
 
-	rootCmd.Flags().BoolVarP(&printVersion, "version", "v", false, "print version and exit")
+	rootCmd.Flags().BoolVarP(&printVersion, "version", "v", false, "Print version and exit")
 	return rootCmd
 }
 
@@ -69,12 +70,17 @@ func init() {
 	cobra.OnInitialize(initConfig, setConfig, initRunner)
 
 	RootCmd = newRootCommand()
-	RootCmd.AddCommand(newConfigCmd())
-	RootCmd.AddCommand(newQuoteCmd())
-	RootCmd.AddCommand(newBuyCmd())
-	RootCmd.AddCommand(newSellCmd())
-	RootCmd.AddCommand(newInfoCmd())
-	RootCmd.AddCommand(newVersionCmd())
+	RootCmd.AddCommand(
+		newConfigCmd(),
+		newQuoteCmd(),
+		newBuyCmd(),
+		newSellCmd(),
+		newCancelCmd(),
+		newOrdersCmd(),
+		newPositionsCmd(),
+		newInfoCmd(),
+		newVersionCmd(),
+	)
 }
 
 // initClient instantiates a new brokr client
