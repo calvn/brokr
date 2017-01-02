@@ -8,15 +8,17 @@ import (
 
 // Config holds the merged configuration from the config file, environment variables, and flags
 type Config struct {
-	Brokerage   string `yaml:"brokerage"`
-	AccessToken string `yaml:"access_token"`
+	Brokerage    string `yaml:"brokerage"`
+	AccessToken  string `yaml:"access_token"`
+	PreviewOrder bool   `yaml:"preview_order"`
 }
 
 // Create a new config from Viper object
 func New(v *viper.Viper) *Config {
 	config := &Config{
-		Brokerage:   v.GetString("brokerage"),
-		AccessToken: v.GetString("access_token"),
+		Brokerage:    v.GetString("brokerage"),
+		AccessToken:  v.GetString("access_token"),
+		PreviewOrder: true,
 	}
 
 	// NOTE: Should logic be performed in there , or handled upstream?

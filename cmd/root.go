@@ -72,6 +72,7 @@ func init() {
 	RootCmd.AddCommand(newConfigCmd())
 	RootCmd.AddCommand(newQuoteCmd())
 	RootCmd.AddCommand(newBuyCmd())
+	RootCmd.AddCommand(newSellCmd())
 	RootCmd.AddCommand(newInfoCmd())
 	RootCmd.AddCommand(newVersionCmd())
 }

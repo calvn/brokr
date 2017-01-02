@@ -23,23 +23,13 @@ import (
 	"github.com/spf13/viper"
 )
 
-var (
-	previewFlag  bool
-	durationFlag string
-)
-
-const (
-	limitOrder = "limit"
-	stopOrder  = "stop"
-)
-
-func newBuyCmd() *cobra.Command {
+func newSellCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "buy QUANTITY SYMBOL",
-		Aliases: []string{"b"},
-		Short:   "Preview or place a buy order",
-		Long:    `Preview or place a buy order`,
-		Run:     buyCmdFunc,
+		Use:     "sell QUANTITY SYMBOL",
+		Aliases: []string{"s"},
+		Short:   "Preview or place a sell order",
+		Long:    `Preview or place a sell order`,
+		Run:     sellCmdFunc,
 	}
 	cmd.Flags().BoolVarP(&previewFlag, "preview", "p", true, "Preview order, default: true")
 	cmd.Flags().StringVarP(&durationFlag, "duration", "d", "day", "Duration of the order, default: day")
@@ -48,9 +38,7 @@ func newBuyCmd() *cobra.Command {
 	return cmd
 }
 
-// Regex for option symbols: ^[a-zA-Z]{1,5}\d+{6}[CP]{1}\d{8}$
-
-func buyCmdFunc(cmd *cobra.Command, args []string) {
+func sellCmdFunc(cmd *cobra.Command, args []string) {
 	if len(args) < 2 {
 		fmt.Println("Invalid buy command")
 		return
@@ -73,17 +61,17 @@ func buyCmdFunc(cmd *cobra.Command, args []string) {
 	orderType := "market"
 	triggerPrice := 0.0
 	if len(args) == 4 {
-		switch {
-		case args[2] == "limit" || args[2] == "l":
+		switch args[2] {
+		case "limit":
 			orderType = "limit"
-		case args[2] == "stop":
+		case "stop":
 			orderType = "stop"
 		}
 
 		triggerPrice, _ = strconv.ParseFloat(args[3], 64)
 	}
 
-	ids, err := brokrRunner.PlaceOrder("equity", symbol, durationFlag, "sell", q, orderType, triggerPrice)
+	ids, err := brokrRunner.PlaceOrder("equity", symbol, durationFlag, "buy", q, orderType, triggerPrice)
 	if err != nil {
 		fmt.Println(err)
 		return
