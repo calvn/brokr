@@ -17,7 +17,6 @@ package cmd
 import (
 	"fmt"
 	"strconv"
-	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -71,12 +70,11 @@ func sellCmdFunc(cmd *cobra.Command, args []string) {
 		triggerPrice, _ = strconv.ParseFloat(args[3], 64)
 	}
 
-	ids, err := brokrRunner.PlaceOrder("equity", symbol, durationFlag, "buy", q, orderType, triggerPrice)
+	output, err := brokrRunner.PlaceOrder("equity", symbol, durationFlag, "buy", q, orderType, triggerPrice)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	output := strings.Join(ids, " ")
-	fmt.Printf("Order IDs: %s\n", output)
+	fmt.Printf("Order IDs: \n%s\n", output)
 }

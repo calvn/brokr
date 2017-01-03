@@ -3,6 +3,7 @@ package tradier
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/calvn/go-tradier/tradier"
 )
@@ -19,7 +20,7 @@ func (b *TradierBrokerage) GetOrders() error {
 	return nil
 }
 
-func (b *TradierBrokerage) PlaceOrder(class, symbol, duration, side string, quantity int, orderType string, price float64) ([]string, error) {
+func (b *TradierBrokerage) PlaceOrder(class, symbol, duration, side string, quantity int, orderType string, price float64) (string, error) {
 	params := &tradier.OrderParams{
 		Class:    class,
 		Symbol:   symbol,
@@ -38,7 +39,7 @@ func (b *TradierBrokerage) PlaceOrder(class, symbol, duration, side string, quan
 
 	orders, _, err := b.client.Order.Create(*b.Account, params)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	orderIDs := []string{}
@@ -47,7 +48,9 @@ func (b *TradierBrokerage) PlaceOrder(class, symbol, duration, side string, quan
 		orderIDs = append(orderIDs, strconv.Itoa(*o.ID))
 	}
 
-	return orderIDs, nil
+	output := strings.Join(orderIDs, "\n")
+
+	return output, nil
 }
 
 // FIXME: Order.Delete should return order and not orders

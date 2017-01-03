@@ -35,10 +35,14 @@ func newQuoteCmd() *cobra.Command {
 
 func quoteCmdFunc(cmd *cobra.Command, args []string) {
 	if len(args) == 0 {
+		fmt.Println("No quotes provided")
 		return
 	}
 
-	if err := brokrRunner.GetQuotes(args); err != nil {
+	output, err := brokrRunner.GetQuotes(args)
+	if err != nil {
 		fmt.Println(err)
 	}
+
+	fmt.Println(output)
 }

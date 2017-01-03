@@ -23,6 +23,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// VersionDetails holds build-related information
 type VersionDetails struct {
 	Version   string
 	GitCommit string
