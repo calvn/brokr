@@ -22,7 +22,7 @@ import (
 
 func newQuoteCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "quote",
+		Use:     "quote [SYMBOL...]",
 		Aliases: []string{"q"},
 		Short:   "Get quotes from a set of symbols",
 		Long: `Get quotes from a set of symbols.
@@ -35,7 +35,7 @@ func newQuoteCmd() *cobra.Command {
 
 func quoteCmdFunc(cmd *cobra.Command, args []string) {
 	if len(args) == 0 {
-		fmt.Println("No quotes provided")
+		fmt.Println("No symbols provided")
 		return
 	}
 
