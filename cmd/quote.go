@@ -27,22 +27,22 @@ func newQuoteCmd() *cobra.Command {
 		Short:   "Get quotes from a set of symbols",
 		Long: `Get quotes from a set of symbols.
 	Example: brokr quote aapl googl`,
-		Run: quoteCmdFunc,
+		RunE: quoteCmdFunc,
 	}
 
 	return cmd
 }
 
-func quoteCmdFunc(cmd *cobra.Command, args []string) {
+func quoteCmdFunc(cmd *cobra.Command, args []string) error {
 	if len(args) == 0 {
-		fmt.Println("No symbols provided")
-		return
+		return fmt.Errorf("No symbols provided\n")
 	}
 
 	output, err := brokrRunner.GetQuotes(args)
 	if err != nil {
-		fmt.Println(err)
+		return err
 	}
 
 	fmt.Println(output)
+	return nil
 }

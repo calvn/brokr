@@ -38,7 +38,7 @@ func newBuyCmd() *cobra.Command {
 		Aliases: []string{"b"},
 		Short:   "Preview or place a buy order",
 		Long:    `Preview or place a buy order`,
-		Run:     buyCmdFunc,
+		RunE:    buyCmdFunc,
 	}
 	cmd.Flags().BoolVarP(&previewFlag, "preview", "p", true, "Preview order, default: true")
 	cmd.Flags().StringVarP(&durationFlag, "duration", "d", "day", "Duration of the order, default: day")
@@ -49,23 +49,21 @@ func newBuyCmd() *cobra.Command {
 
 // Regex for option symbols: ^[a-zA-Z]{1,5}\d+{6}[CP]{1}\d{8}$
 
-func buyCmdFunc(cmd *cobra.Command, args []string) {
+func buyCmdFunc(cmd *cobra.Command, args []string) error {
 	if len(args) < 2 {
-		fmt.Println("Invalid buy command")
-		return
+		return fmt.Errorf("Invalid buy command")
 	}
 
 	// Quantity
 	q, err := strconv.Atoi(args[0])
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
 
 	// Symbol
 	symbol := args[1]
 	if len(symbol) == 0 {
-		fmt.Println("Cannot provide empty symbol")
+		return fmt.Errorf("Cannot provide empty symbol")
 	}
 
 	// Type and trigger price
@@ -82,11 +80,11 @@ func buyCmdFunc(cmd *cobra.Command, args []string) {
 		triggerPrice, _ = strconv.ParseFloat(args[3], 64)
 	}
 
-	output, err := brokrRunner.PlaceOrder("equity", symbol, durationFlag, "sell", q, orderType, triggerPrice)
+	output, err := brokrRunner.PlaceOrder("equity", symbol, durationFlag, "buy", q, orderType, triggerPrice)
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
 
 	fmt.Printf("Order IDs: \n%s\n", output)
+	return nil
 }

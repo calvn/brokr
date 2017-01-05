@@ -6,7 +6,8 @@ import (
 	"golang.org/x/oauth2"
 )
 
-type Brokerage interface {
+// Broker is the interface for any brokerage
+type Broker interface {
 	Name() string
 	GetQuotes([]string) (string, error)
 	GetPositions() error
@@ -15,8 +16,9 @@ type Brokerage interface {
 	CancelOrder([]string) error
 }
 
-func New(config *config.Config) *Brokerage {
-	var b Brokerage
+// New creates a new brokerage object based on the provided configuration
+func New(config *config.Config) *Broker {
+	var b Broker
 
 	switch config.Brokerage {
 	case "tradier":
@@ -25,7 +27,7 @@ func New(config *config.Config) *Brokerage {
 		)
 
 		oauthClient := oauth2.NewClient(oauth2.NoContext, tokenSource)
-		b = tradier.NewTradierBrokerage(oauthClient)
+		b = tradier.NewBrokerage(oauthClient)
 	}
 
 	return &b

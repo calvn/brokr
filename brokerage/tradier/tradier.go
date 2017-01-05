@@ -7,14 +7,15 @@ import (
 	"github.com/calvn/go-tradier/tradier"
 )
 
-type TradierBrokerage struct {
+// Brokerage represents the Tradier brokerage used for the runner
+type Brokerage struct {
 	client *tradier.Client
 
-	// Account is the account ID that will be used
-	Account *string
+	AccountID *string // Account is the account ID that will be used
 }
 
-func NewTradierBrokerage(httpClient *http.Client) *TradierBrokerage {
+// NewTradierBrokerage creates a new instance of *Brokerage
+func NewBrokerage(httpClient *http.Client) *Brokerage {
 	client := tradier.NewClient(httpClient)
 
 	u, _, err := client.User.Profile()
@@ -23,15 +24,29 @@ func NewTradierBrokerage(httpClient *http.Client) *TradierBrokerage {
 	}
 
 	// TODO: Handle the case were profile/account slice is empty
-	defaultAccount := u.Profile.Account[0].AccountNumber
+	// defaultAccount := u.Profile.Account[0].AccountNumber
 
-	return &TradierBrokerage{
-		client:  client,
-		Account: defaultAccount,
+	b := &Brokerage{
+		client: client,
 	}
+
+	// Set sane defaults
+	b.setDefaultAccount(u)
+
+	return b
 }
 
-func (b *TradierBrokerage) SwitchAccount(accountID string) error {
+func (b *Brokerage) setDefaultAccount(user *tradier.User) {
+	// If no accounts found, set it to a dummy value
+	if len(user.Profile.Account) == 0 {
+		b.AccountID = tradier.String("UNKNOWN")
+	}
+
+	b.AccountID = user.Profile.Account[0].AccountNumber
+}
+
+// SwitchAccount switches the account that the client uses to accountID.
+func (b *Brokerage) SwitchAccount(accountID string) error {
 	p, _, err := b.client.User.Profile()
 	if err != nil {
 		return err
@@ -39,7 +54,7 @@ func (b *TradierBrokerage) SwitchAccount(accountID string) error {
 
 	for _, account := range *p.Accounts {
 		if *account.AccountNumber == accountID {
-			*b.Account = accountID
+			*b.AccountID = accountID
 			return nil
 		}
 	}
@@ -47,6 +62,7 @@ func (b *TradierBrokerage) SwitchAccount(accountID string) error {
 	return fmt.Errorf("No account %s found for user.", accountID)
 }
 
-func (b *TradierBrokerage) Name() string {
+// Name returns the name of the brokerage.
+func (b *Brokerage) Name() string {
 	return "Tradier"
 }

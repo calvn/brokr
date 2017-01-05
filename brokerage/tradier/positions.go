@@ -2,8 +2,8 @@ package tradier
 
 import "fmt"
 
-func (b *TradierBrokerage) GetPositions() error {
-	account, _, err := b.client.Account.Positions(*b.Account)
+func (b *Brokerage) GetPositions() error {
+	account, _, err := b.client.Account.Positions(*b.AccountID)
 	if err != nil {
 		return err
 	}

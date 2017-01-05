@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func (b *TradierBrokerage) GetQuotes(symbols []string) (string, error) {
+func (b *Brokerage) GetQuotes(symbols []string) (string, error) {
 	quotes, _, err := b.client.Markets.Quotes(symbols)
 	if err != nil {
 		return "", err

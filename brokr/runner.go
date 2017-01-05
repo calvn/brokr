@@ -5,14 +5,14 @@ import (
 	"github.com/calvn/brokr/config"
 )
 
+// Runner is used to perform actions on a brokerage, based on the provided *config.Config
 type Runner struct {
-	brokerage.Brokerage
+	brokerage.Broker
 	config *config.Config
 }
 
-// NewRunner create a new instance of Runner with the provided configuration
+// NewRunner create a new instance of *Runner with the provided configuration.
 func NewRunner(config *config.Config) *Runner {
-	// TODO: Init client based on config
 	// Currently defaults to Tradier, the only supported brokerage
 	b := brokerage.New(config)
 

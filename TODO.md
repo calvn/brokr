@@ -6,7 +6,8 @@ Laundry list
 - [x] Merge existing config file
 - [x] Merge flag, env, and config file settings in priority
 - [x] Properly use and load environment variables
-- [ ] BROKR_ACCESS_TOKEN should be globally available to be used for all commands that require auth
+- [ ] ~~BROKR_ACCESS_TOKEN should be globally available~~
+    - Used for all commands that require auth
 
 #### defaults
 - [ ] Ability to toggle preview-order (default should be set to true)
@@ -120,7 +121,12 @@ Should there be only buy/sell on orders? For instance, *sell short* turns into *
 
 ## cli behavior
 - [ ] Interactive/continuous command
-- [ ] Better alternative for returning errors other that `fmt.Println()`, better error handling
+- [ ] better error handling other than using `fmt.Println()`
 
 ## docs
 - [ ] Write up docs for usage
+
+## Tradier API issues
+
+### POST ``/v1/accounts/{account_id}/orders`
+Requests on a non-existent `account_id` returns application/xml regardless of whether -H "Accept: application/json" is provided.
