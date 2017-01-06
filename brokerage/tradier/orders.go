@@ -11,7 +11,7 @@ import (
 var orderTemplate = `{{range . -}}
 {{if .Symbol -}}
 Preview order:
-{{else -}}
+{{- else -}}
 Order:
 {{- end}}
 {{- if .ID}}
