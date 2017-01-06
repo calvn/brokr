@@ -78,10 +78,10 @@ func configCmdFunc(cmd *cobra.Command, args []string) {
 
 // Check for required flags, reads from viper
 func configPreRunEFunc(cmd *cobra.Command, args []string) error {
-	t := viper.GetString("access_token")
-	mergedConfig.AccessToken = t
+	t := viper.GetString("tradier.access_token")
+	mergedConfig.Tradier.AccessToken = t
 
-	if mergedConfig.AccessToken == "" {
+	if mergedConfig.Tradier.AccessToken == "" {
 		return fmt.Errorf("No access token provided.")
 	}
 
@@ -102,6 +102,7 @@ func initConfig() {
 // setConfig reads config from viper and instantiates mergedConfig, used for proceeding commands
 func setConfig() {
 	viper.SetDefault("brokerage", "tradier")
+	viper.SetDefault("preview_order", true)
 	v := viper.GetViper()
 	mergedConfig = config.New(v)
 }

@@ -70,7 +70,7 @@ func sellCmdFunc(cmd *cobra.Command, args []string) {
 		triggerPrice, _ = strconv.ParseFloat(args[3], 64)
 	}
 
-	output, err := brokrRunner.PlaceOrder("equity", symbol, durationFlag, "sell", q, orderType, triggerPrice)
+	output, err := brokrRunner.CreateOrder(previewFlag, "equity", symbol, durationFlag, "sell", q, orderType, triggerPrice)
 	if err != nil {
 		fmt.Println(err)
 		return
