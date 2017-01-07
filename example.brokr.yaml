@@ -2,5 +2,5 @@ brokerage: tradier
 preview_order: true
 
 tradier:
-  account_io: 00Y0000 # Account is abstracted away from the runner
+  account_id: 00Y0000 # Account is abstracted away from the runner
   access_token: ABC000000000000

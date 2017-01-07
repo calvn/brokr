@@ -30,6 +30,7 @@ func New(v *viper.Viper) *Config {
 	// Handle tradier config if it exists
 	if v.GetStringMap("tradier") != nil {
 		tc := &TradierConfig{
+			AccountID:   v.GetString("tradier.account_id"),
 			AccessToken: v.GetString("tradier.access_token"),
 		}
 

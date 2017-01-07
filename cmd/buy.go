@@ -32,7 +32,7 @@ func newBuyCmd() *cobra.Command {
 		Long:    `Preview or place a buy order`,
 		RunE:    buyCmdFunc,
 	}
-	cmd.Flags().BoolVarP(&previewBuyFlag, "preview", "p", false, "Preview order, can overwrite the setting from the config")
+	cmd.Flags().BoolVarP(&previewBuyFlag, "preview", "p", false, "Preview order, overwrites the setting from the config")
 	cmd.Flags().StringVarP(&durationFlag, "duration", "d", "day", "Duration of the order, default: day")
 
 	return cmd

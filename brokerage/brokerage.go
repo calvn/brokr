@@ -39,7 +39,7 @@ func New(config *config.Config) *Broker {
 		)
 
 		oauthClient := oauth2.NewClient(oauth2.NoContext, tokenSource)
-		b = tradier.NewBrokerage(oauthClient)
+		b = tradier.NewBrokerage(oauthClient, config.Tradier.AccountID)
 	}
 
 	return &b

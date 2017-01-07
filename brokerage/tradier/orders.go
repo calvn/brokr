@@ -70,7 +70,7 @@ func (b *Brokerage) CreateOrder(preview bool, class, symbol, duration, side stri
 		params.Stop = price
 	}
 
-	orders, _, err := b.client.Order.Create(*b.AccountID, params)
+	order, _, err := b.client.Order.Create(*b.AccountID, params)
 	if err != nil {
 		return "", err
 	}
@@ -78,7 +78,7 @@ func (b *Brokerage) CreateOrder(preview bool, class, symbol, duration, side stri
 	tmpl := template.Must(template.New("").Parse(orderTemplate))
 	var out bytes.Buffer
 
-	tmpl.Execute(&out, orders)
+	tmpl.Execute(&out, order)
 	output := out.String()
 
 	return output, nil

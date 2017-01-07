@@ -14,8 +14,8 @@ type Brokerage struct {
 	AccountID *string // Account is the account ID that will be used
 }
 
-// NewTradierBrokerage creates a new instance of *Brokerage
-func NewBrokerage(httpClient *http.Client) *Brokerage {
+// NewBrokerage creates a new instance of *Brokerage
+func NewBrokerage(httpClient *http.Client, accountID string) *Brokerage {
 	client := tradier.NewClient(httpClient)
 
 	u, _, err := client.User.Profile()
@@ -23,15 +23,16 @@ func NewBrokerage(httpClient *http.Client) *Brokerage {
 		return nil
 	}
 
-	// TODO: Handle the case were profile/account slice is empty
-	// defaultAccount := u.Profile.Account[0].AccountNumber
-
 	b := &Brokerage{
 		client: client,
 	}
 
 	// Set sane defaults
-	b.setDefaultAccount(u)
+	if accountID == "" {
+		b.setDefaultAccount(u)
+	} else {
+		b.AccountID = tradier.String(accountID)
+	}
 
 	return b
 }

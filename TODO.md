@@ -8,6 +8,7 @@ Laundry list
 - [x] Properly use and load environment variables
 - [ ] ~~BROKR_ACCESS_TOKEN should be globally available~~
     - Used for all commands that require auth
+- [ ] fix brokerage interface to take in entire config
 
 #### defaults
 - [ ] Ability to toggle preview-order (default should be set to true)
@@ -25,6 +26,7 @@ Laundry list
 
 ## info
 - [ ] Display current remaining rate limits
+- [ ] Display current configuration, shortcut to `cat ~/.brokr.yaml`
 
 ## account
 - [ ] Display all accounts under the user
