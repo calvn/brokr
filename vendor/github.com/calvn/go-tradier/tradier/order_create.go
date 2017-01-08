@@ -8,7 +8,7 @@ import (
 )
 
 // Create sends an order creation request. This method supports single-sided orders as well as multileg and combo orders.
-func (s *OrderService) Create(accountID string, params *OrderParams) (*Orders, *Response, error) {
+func (s *OrderService) Create(accountID string, params *OrderParams) (*Order, *Response, error) {
 	u := fmt.Sprintf("accounts/%s/orders", accountID)
 
 	// Populate data
@@ -29,7 +29,7 @@ func (s *OrderService) Create(accountID string, params *OrderParams) (*Orders, *
 		return nil, nil, err
 	}
 
-	o := &Orders{}
+	o := &Order{}
 
 	resp, err := s.client.Do(req, o)
 	if err != nil {

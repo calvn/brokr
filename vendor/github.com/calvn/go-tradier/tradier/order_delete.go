@@ -3,7 +3,7 @@ package tradier
 import "fmt"
 
 // Delete sends an order deletion/cancellation request.
-func (s *OrderService) Delete(accountID, orderID string) (*Orders, *Response, error) {
+func (s *OrderService) Delete(accountID, orderID string) (*Order, *Response, error) {
 	u := fmt.Sprintf("accounts/%s/orders/%s", accountID, orderID)
 
 	req, err := s.client.NewRequest("DELETE", u, nil)
@@ -11,7 +11,7 @@ func (s *OrderService) Delete(accountID, orderID string) (*Orders, *Response, er
 		return nil, nil, err
 	}
 
-	o := &Orders{}
+	o := &Order{}
 
 	resp, err := s.client.Do(req, o)
 	if err != nil {

@@ -35,7 +35,7 @@ func main() {
 		Quantity: 1,
 		Type:     "market",
 	}
-	order, _, err := client.Order.Create("6YA05708", params)
+	order, _, err := client.Order.Create("6YA00005", params)
 	if err != nil {
 		log.Fatalf("Error fetching order: %s", err)
 	}

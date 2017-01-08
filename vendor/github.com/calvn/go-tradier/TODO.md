@@ -14,6 +14,22 @@
 - [ ] Fix quotes to markets/quotes
 - [ ] Fix OrderService to OrdersService
 
+## Error handling
+
+There are case where the endpoint returns 200, but there is an actual error.
+
+For example on `/v1/accounts/{account_id}/orders`:
+```
+{
+  "errors": {
+    "error": [
+      "Backoffice rejected override of the order.",
+      "InitialMargin"
+    ]
+  }
+}
+```
+
 ## Potential enhancements
 
 Structs that are basically wrappers around slices (i.e. `Orders`) could be turned directly into slices. There would have to be changes in MarshalJSON() and UnmarshalJSON() for this to work. This way the underlying slice object can be accessed directly. In other words, `Orders.Order[0]` could be turned into `Orders[0]`.

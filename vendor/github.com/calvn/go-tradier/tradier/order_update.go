@@ -10,7 +10,7 @@ import (
 // NOTE: Since this is using OrderParams, we should to some sort of checking or improve on error handling
 
 // Update sends an order update request.
-func (s *OrderService) Update(accountID, orderID string, params *OrderParams) (*Orders, *Response, error) {
+func (s *OrderService) Update(accountID, orderID string, params *OrderParams) (*Order, *Response, error) {
 	u := fmt.Sprintf("accounts/%s/orders/%s", accountID, orderID)
 
 	// Populate data
@@ -31,7 +31,7 @@ func (s *OrderService) Update(accountID, orderID string, params *OrderParams) (*
 		return nil, nil, err
 	}
 
-	o := &Orders{}
+	o := &Order{}
 
 	resp, err := s.client.Do(req, o)
 	if err != nil {
