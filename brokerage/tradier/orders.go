@@ -84,15 +84,23 @@ func (b *Brokerage) CreateOrder(preview bool, class, symbol, duration, side stri
 	return output, nil
 }
 
-// FIXME: Order.Delete should return order and not orders
-func (b *Brokerage) CancelOrder(orderIDs []string) error {
-	// TODO: Implement multi-error, print out order status after cancel submission
+// CancelOrder cancels pending orders
+func (b *Brokerage) CancelOrder(orderIDs []string) (string, error) {
+	output := ""
+
+	// FIXME: Append error to output
 	for _, id := range orderIDs {
-		_, _, err := b.client.Order.Delete(*b.AccountID, id)
+		order, _, err := b.client.Order.Delete(*b.AccountID, id)
 		if err != nil {
-			return err
+			return "", err
 		}
+
+		var out bytes.Buffer
+		tmpl := template.Must(template.New("").Parse(orderTemplate))
+		tmpl.Execute(&out, order)
+
+		output += out.String()
 	}
 
-	return nil
+	return output, nil
 }
