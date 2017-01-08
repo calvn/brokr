@@ -45,9 +45,9 @@ func (b *Brokerage) setDefaultAccount() {
 	u, _, err := b.client.User.Profile()
 	if err != nil || len(u.Profile.Account) == 0 {
 		b.AccountID = tradier.String("UNKNOWN")
+	} else {
+		b.AccountID = u.Profile.Account[0].AccountNumber
 	}
-
-	b.AccountID = u.Profile.Account[0].AccountNumber
 }
 
 // SwitchAccount switches the account that the client uses to accountID.

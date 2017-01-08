@@ -17,8 +17,9 @@ package cmd
 import (
 	"fmt"
 
+	yaml "gopkg.in/yaml.v2"
+
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 func newInfoCmd() *cobra.Command {
@@ -26,17 +27,19 @@ func newInfoCmd() *cobra.Command {
 		Use:   "info",
 		Short: "Show information about brokr settings",
 		Long:  `Show information about brokr settings`,
-		Run:   infoCmdFunc,
+		RunE:  infoCmdFunc,
 	}
 
 	return cmd
 }
 
-func infoCmdFunc(cmd *cobra.Command, args []string) {
-	// If a config file is found, read it in.
-	fmt.Printf(`brokr infomation:
-Brokerage:       %s
-Config file:     %s
-`,
-		brokrRunner.Name(), viper.ConfigFileUsed())
+func infoCmdFunc(cmd *cobra.Command, args []string) error {
+	output, err := yaml.Marshal(&mergedConfig)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf(string(output))
+
+	return nil
 }

@@ -19,8 +19,8 @@ type Broker interface {
 func New(config *config.Config) *Broker {
 	var b Broker
 
-	switch config.Brokerage {
-	case "tradier":
+	switch {
+	case config.Brokerage == "tradier" && config.Tradier != nil:
 		b = tradier.NewBrokerage(config.Tradier)
 	}
 
