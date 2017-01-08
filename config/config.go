@@ -9,32 +9,44 @@ import (
 // Config holds the merged configuration from the config file, environment variables, and flags
 type Config struct {
 	Brokerage    string `yaml:"brokerage"`
-	AccessToken  string `yaml:"access_token"`
 	PreviewOrder bool   `yaml:"preview_order"`
+
+	Tradier *TradierConfig `yaml:"tradier,omitempty"`
 }
 
-// Create a new config from Viper object
+// TradierConfig holds the configuration for Tradier brokerage
+type TradierConfig struct {
+	AccountID   string `yaml:"account_id,omitempty"`
+	AccessToken string `yaml:"access_token,omitempty"`
+}
+
+// New creates a new config from Viper object
 func New(v *viper.Viper) *Config {
 	config := &Config{
 		Brokerage:    v.GetString("brokerage"),
-		AccessToken:  v.GetString("access_token"),
-		PreviewOrder: true,
+		PreviewOrder: v.GetBool("preview_order"),
 	}
 
-	// NOTE: Should logic be performed in there , or handled upstream?
-	// if err := config.checkConfig(); err != nil {
-	// 	return nil
-	// }
+	// Handle tradier config if it exists
+	if len(v.GetStringMap("tradier")) != 0 {
+		tc := &TradierConfig{
+			AccountID:   v.GetString("tradier.account_id"),
+			AccessToken: v.GetString("tradier.access_token"),
+		}
+
+		config.Tradier = tc
+	}
 
 	return config
 }
 
+// CheckConfig checks for the validity of the cofiguration
 func (c *Config) CheckConfig() error {
 	if len(c.Brokerage) == 0 {
 		return fmt.Errorf("config error: brokerage not provided")
 	}
 
-	if len(c.AccessToken) == 0 {
+	if len(c.Tradier.AccessToken) == 0 {
 		return fmt.Errorf("config error: access token not provided")
 	}
 

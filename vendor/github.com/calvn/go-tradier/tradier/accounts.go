@@ -66,10 +66,6 @@ func (a *Account) UnmarshalJSON(b []byte) error {
 
 // MarshalJSON marshals Account into JSON
 func (a *Account) MarshalJSON() ([]byte, error) {
-	if a.Orders == nil {
-		return json.Marshal(a.Orders)
-	}
-
 	if a.unwrapped {
 		return json.Marshal(*a)
 	}

@@ -22,15 +22,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var (
-	previewFlag  bool
-	durationFlag string
-)
-
-const (
-	limitOrder = "limit"
-	stopOrder  = "stop"
-)
+var previewBuyFlag bool
 
 func newBuyCmd() *cobra.Command {
 	cmd := &cobra.Command{
@@ -40,9 +32,8 @@ func newBuyCmd() *cobra.Command {
 		Long:    `Preview or place a buy order`,
 		RunE:    buyCmdFunc,
 	}
-	cmd.Flags().BoolVarP(&previewFlag, "preview", "p", true, "Preview order, default: true")
+	cmd.Flags().BoolVarP(&previewBuyFlag, "preview", "p", false, "Preview order, overwrites the setting from the config")
 	cmd.Flags().StringVarP(&durationFlag, "duration", "d", "day", "Duration of the order, default: day")
-	viper.BindPFlag("preview_order", cmd.Flags().Lookup("preview"))
 
 	return cmd
 }
@@ -80,11 +71,17 @@ func buyCmdFunc(cmd *cobra.Command, args []string) error {
 		triggerPrice, _ = strconv.ParseFloat(args[3], 64)
 	}
 
-	output, err := brokrRunner.PlaceOrder("equity", symbol, durationFlag, "buy", q, orderType, triggerPrice)
+	// HACK: Overwrite previewFlag if it exists in viper and previewFlag is not passed in
+	// This should not be performed in the Run function
+	if !previewBuyFlag && viper.IsSet("preview_order") {
+		previewBuyFlag = viper.GetBool("preview_order")
+	}
+
+	output, err := brokrRunner.CreateOrder(previewBuyFlag, "equity", symbol, durationFlag, "buy", q, orderType, triggerPrice)
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("Order IDs: \n%s\n", output)
+	fmt.Println(output)
 	return nil
 }

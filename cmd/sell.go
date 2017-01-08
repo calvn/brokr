@@ -28,53 +28,54 @@ func newSellCmd() *cobra.Command {
 		Aliases: []string{"s"},
 		Short:   "Preview or place a sell order",
 		Long:    `Preview or place a sell order`,
-		Run:     sellCmdFunc,
+		RunE:    sellCmdFunc,
 	}
-	cmd.Flags().BoolVarP(&previewFlag, "preview", "p", true, "Preview order, default: true")
+	cmd.Flags().BoolVarP(&previewFlag, "preview", "p", false, "Preview order, overwrites the setting from the config")
 	cmd.Flags().StringVarP(&durationFlag, "duration", "d", "day", "Duration of the order, default: day")
-	viper.BindPFlag("preview_order", cmd.Flags().Lookup("preview"))
 
 	return cmd
 }
 
-func sellCmdFunc(cmd *cobra.Command, args []string) {
+func sellCmdFunc(cmd *cobra.Command, args []string) error {
 	if len(args) < 2 {
-		fmt.Println("Invalid buy command")
-		return
+		return fmt.Errorf("Invalid buy command")
 	}
 
 	// Quantity
 	q, err := strconv.Atoi(args[0])
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
 
 	// Symbol
 	symbol := args[1]
 	if len(symbol) == 0 {
-		fmt.Println("Cannot provide empty symbol")
+		return fmt.Errorf("Cannot provide empty symbol")
 	}
 
 	// Type and trigger price
 	orderType := "market"
 	triggerPrice := 0.0
 	if len(args) == 4 {
-		switch args[2] {
-		case "limit":
-			orderType = "limit"
-		case "stop":
-			orderType = "stop"
+		switch {
+		case args[2] == limitOrder || args[2] == "l":
+			orderType = limitOrder
+		case args[2] == stopOrder:
+			orderType = stopOrder
 		}
 
 		triggerPrice, _ = strconv.ParseFloat(args[3], 64)
 	}
 
-	output, err := brokrRunner.PlaceOrder("equity", symbol, durationFlag, "sell", q, orderType, triggerPrice)
-	if err != nil {
-		fmt.Println(err)
-		return
+	if !previewFlag && viper.IsSet("preview_order") {
+		previewFlag = viper.GetBool("preview_order")
 	}
 
-	fmt.Printf("Order IDs: \n%s\n", output)
+	output, err := brokrRunner.CreateOrder(previewFlag, "equity", symbol, durationFlag, "sell", q, orderType, triggerPrice)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(output)
+	return nil
 }

@@ -2,8 +2,10 @@ package tradier
 
 import (
 	"fmt"
-	"net/http"
 
+	"golang.org/x/oauth2"
+
+	"github.com/calvn/brokr/config"
 	"github.com/calvn/go-tradier/tradier"
 )
 
@@ -14,35 +16,38 @@ type Brokerage struct {
 	AccountID *string // Account is the account ID that will be used
 }
 
-// NewTradierBrokerage creates a new instance of *Brokerage
-func NewBrokerage(httpClient *http.Client) *Brokerage {
-	client := tradier.NewClient(httpClient)
+// NewBrokerage creates a new instance of *Brokerage
+func NewBrokerage(config *config.TradierConfig) *Brokerage {
+	tokenSource := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: config.AccessToken},
+	)
 
-	u, _, err := client.User.Profile()
-	if err != nil {
-		return nil
-	}
+	oauthClient := oauth2.NewClient(oauth2.NoContext, tokenSource)
 
-	// TODO: Handle the case were profile/account slice is empty
-	// defaultAccount := u.Profile.Account[0].AccountNumber
+	client := tradier.NewClient(oauthClient)
 
 	b := &Brokerage{
 		client: client,
 	}
 
 	// Set sane defaults
-	b.setDefaultAccount(u)
+	if config.AccountID == "" {
+		b.setDefaultAccount()
+	} else {
+		b.AccountID = tradier.String(config.AccountID)
+	}
 
 	return b
 }
 
-func (b *Brokerage) setDefaultAccount(user *tradier.User) {
+func (b *Brokerage) setDefaultAccount() {
 	// If no accounts found, set it to a dummy value
-	if len(user.Profile.Account) == 0 {
+	u, _, err := b.client.User.Profile()
+	if err != nil || len(u.Profile.Account) == 0 {
 		b.AccountID = tradier.String("UNKNOWN")
+	} else {
+		b.AccountID = u.Profile.Account[0].AccountNumber
 	}
-
-	b.AccountID = user.Profile.Account[0].AccountNumber
 }
 
 // SwitchAccount switches the account that the client uses to accountID.

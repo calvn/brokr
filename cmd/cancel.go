@@ -36,7 +36,11 @@ func cancelCmdFunc(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	if err := brokrRunner.CancelOrder(args); err != nil {
+	output, err := brokrRunner.CancelOrder(args)
+	if err != nil {
 		fmt.Println(err)
+		return
 	}
+
+	fmt.Println(output)
 }

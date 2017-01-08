@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"net/url"
 	"sync"
+
+	"github.com/calvn/go-tradier/tradier/errors"
 )
 
 const (
@@ -125,8 +127,7 @@ func (c *Client) Do(req *http.Request, v interface{}) (*Response, error) {
 	}()
 
 	response := newResponse(resp)
-	err = checkResponse(resp)
-	if err != nil {
+	if err = checkResponse(resp); err != nil {
 		return response, err
 	}
 
@@ -135,9 +136,32 @@ func (c *Client) Do(req *http.Request, v interface{}) (*Response, error) {
 		if w, ok := v.(io.Writer); ok {
 			io.Copy(w, resp.Body)
 		} else {
-			err = json.NewDecoder(resp.Body).Decode(v)
+			// Read response body into byte array
+			var respBody []byte
+			respBody, err = ioutil.ReadAll(resp.Body)
+			// ignore EOF errors caused by empty response body
 			if err == io.EOF {
-				err = nil // ignore EOF errors caused by empty response body
+				err = nil
+			}
+			if err != nil {
+				return nil, err
+			}
+
+			// Attempt to decode response body into Errors, and return it as err if not empty
+			errs := &errors.Errors{}
+			err = json.Unmarshal(respBody, errs)
+			if err != nil {
+				return nil, err
+			}
+
+			if len(errs.Err) != 0 {
+				return nil, errs
+			}
+
+			// Otherwise unmarshal into v interface
+			err = json.Unmarshal(respBody, v)
+			if err != nil {
+				return nil, err
 			}
 		}
 	}

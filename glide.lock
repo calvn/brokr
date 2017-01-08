@@ -1,14 +1,15 @@
 hash: 6cd82f1cdaa1c91eb4b57b8708768911ad2d75b2f9b3e3ce874bb5f213af77f3
-updated: 2016-12-28T13:25:24.356971756-05:00
+updated: 2017-01-07T18:14:31.709730573-05:00
 imports:
 - name: github.com/alecthomas/template
   version: a0175ee3bccc567396460bf5acd36800cb10c49c
   subpackages:
   - parse
 - name: github.com/calvn/go-tradier
-  version: 62433d40b11e113d79cfe518b7051a8f1a69b737
+  version: eddb46a9500c83fcbde83ca31604c955ba79565f
   subpackages:
   - tradier
+  - tradier/errors
 - name: github.com/fsnotify/fsnotify
   version: fd9ec7deca8bf46ecd2a795baaacf2b3a9be1197
 - name: github.com/golang/protobuf
@@ -41,7 +42,7 @@ imports:
 - name: github.com/pelletier/go-buffruneio
   version: df1e16fde7fc330a0ca68167c23bf7ed6ac31d6d
 - name: github.com/pelletier/go-toml
-  version: 017119f7a78a0b5fc0ea39ef6be09f03acf3345d
+  version: 439fbba1f887c286024370cb4f281ba815c4c7d7
 - name: github.com/spf13/afero
   version: 90dd71edc4d0a8b3511dc12ea15d617d03be09e0
   subpackages:
@@ -49,15 +50,15 @@ imports:
 - name: github.com/spf13/cast
   version: 56a7ecbeb18dde53c6db4bd96b541fd9741b8d44
 - name: github.com/spf13/cobra
-  version: de09d9ce07d0d8a74442cfeaa91628cf9492cc23
+  version: 1dd5ff2e11b6dca62fdcb275eb804b94607d8b06
 - name: github.com/spf13/jwalterweatherman
-  version: 33c24e77fb80341fe7130ee7c594256ff08ccc46
+  version: bccdd23ae5e51bd2b081814db093646c7af3d34d
 - name: github.com/spf13/pflag
   version: 25f8b5b07aece3207895bf19f7ab517eb3b22a40
 - name: github.com/spf13/viper
   version: 5ed0fc31f7f453625df314d8e66b9791e8d13003
 - name: golang.org/x/net
-  version: 45e771701b814666a7eb299e6c7a57d0b1799e91
+  version: b7883d29650d340156352196ef5e434db117757b
   subpackages:
   - context
 - name: golang.org/x/oauth2
@@ -69,12 +70,12 @@ imports:
   subpackages:
   - unix
 - name: golang.org/x/text
-  version: a49bea13b776691cb1b49873e5d8df96ec74831a
+  version: 44f4f658a783b0cee41fe0a23b8fc91d9c120558
   subpackages:
   - transform
   - unicode/norm
 - name: google.golang.org/appengine
-  version: 08a149cfaee099e6ce4be01c0113a78c85ee1dee
+  version: 8758a385849434ba5eac8aeedcf5192c5a0f5f10
   subpackages:
   - internal
   - internal/base
