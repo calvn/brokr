@@ -8,8 +8,7 @@ import (
 	"github.com/calvn/go-tradier/tradier"
 )
 
-var orderTemplate = `{{range . -}}
-{{if .Symbol -}}
+var orderTemplate = `{{if .Symbol -}}
 Preview order:
 {{- else -}}
 Order:
@@ -37,7 +36,6 @@ Order:
 {{- end}}
 {{- if .Status}}
   Status: {{.Status}}
-{{- end}}
 {{- end}}`
 
 func (b *Brokerage) GetOrders() error {
