@@ -7,10 +7,9 @@ import (
 
 // Broker is the interface for any brokerage
 type Broker interface {
-	Name() string
 	GetQuotes([]string) (string, error)
 	GetPositions() error
-	GetOrders() error
+	GetOrders() (string, error)
 	CreateOrder(bool, string, string, string, string, int, string, float64) (string, error) // class, symbol, duration, side, amount, type, limit/stop price
 	CancelOrder([]string) (string, error)
 }

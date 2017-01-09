@@ -25,14 +25,18 @@ func newOrdersCmd() *cobra.Command {
 		Use:   "orders",
 		Short: "Get pending orders for an account",
 		Long:  `Get pending orders for an account`,
-		Run:   ordersCmdFunc,
+		RunE:  ordersCmdFunc,
 	}
 
 	return cmd
 }
 
-func ordersCmdFunc(cmd *cobra.Command, args []string) {
-	if err := brokrRunner.GetOrders(); err != nil {
-		fmt.Println(err)
+func ordersCmdFunc(cmd *cobra.Command, args []string) error {
+	output, err := brokrRunner.GetOrders()
+	if err != nil {
+		return err
 	}
+
+	fmt.Println(output)
+	return nil
 }

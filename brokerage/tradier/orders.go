@@ -1,12 +1,6 @@
 package tradier
 
-import (
-	"bytes"
-	"fmt"
-	"html/template"
-
-	"github.com/calvn/go-tradier/tradier"
-)
+// TODO: Move templates into /templates
 
 var orderTemplate = `{{if .Symbol -}}
 Preview order:
@@ -14,7 +8,7 @@ Preview order:
 Order:
 {{- end}}
 {{- if .ID}}
-  OrderID: {{.ID}}
+  ID: {{.ID}}
 {{- end}}
 {{- if .Commission}}
   Commission: {{.Commission}}
@@ -38,67 +32,22 @@ Order:
   Status: {{.Status}}
 {{- end}}`
 
-func (b *Brokerage) GetOrders() error {
-	orders, _, err := b.client.Account.Orders(*b.AccountID)
-	if err != nil {
-		return err
-	}
+var ordersTemplate = `Orders:
+{{- range . -}}
+{{- if .ID}}
+ID: {{.ID}}
+{{- end}}
+{{- if .Status}}
+  Status: {{.Status}}
+{{- end}}
+{{- end}}`
 
-	// FIXME: Correctly print orders
-	fmt.Println(orders)
-
-	return nil
-}
-
-func (b *Brokerage) CreateOrder(preview bool, class, symbol, duration, side string, quantity int, orderType string, price float64) (string, error) {
-	params := &tradier.OrderParams{
-		Preview:  preview,
-		Class:    class,
-		Symbol:   symbol,
-		Duration: duration,
-		Side:     side,
-		Quantity: quantity,
-		Type:     orderType,
-	}
-
-	switch orderType {
-	case "limit":
-		params.Price = price
-	case "stop":
-		params.Stop = price
-	}
-
-	order, _, err := b.client.Order.Create(*b.AccountID, params)
-	if err != nil {
-		return "", err
-	}
-
-	tmpl := template.Must(template.New("").Parse(orderTemplate))
-	var out bytes.Buffer
-
-	tmpl.Execute(&out, order)
-	output := out.String()
-
-	return output, nil
-}
-
-// CancelOrder cancels pending orders
-func (b *Brokerage) CancelOrder(orderIDs []string) (string, error) {
-	output := ""
-
-	// FIXME: Append error to output
-	for _, id := range orderIDs {
-		order, _, err := b.client.Order.Delete(*b.AccountID, id)
-		if err != nil {
-			return "", err
-		}
-
-		var out bytes.Buffer
-		tmpl := template.Must(template.New("").Parse(orderTemplate))
-		tmpl.Execute(&out, order)
-
-		output += out.String()
-	}
-
-	return output, nil
-}
+var positionsTemplate = `Positions:
+{{- range . -}}
+{{- if .Symbol}}
+Symbol: {{.Symbol}}
+{{- end}}
+{{- if .Status}}
+  Status: {{.Status}}
+{{- end}}
+{{- end}}`

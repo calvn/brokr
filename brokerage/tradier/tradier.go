@@ -66,8 +66,3 @@ func (b *Brokerage) SwitchAccount(accountID string) error {
 
 	return fmt.Errorf("No account %s found for user.", accountID)
 }
-
-// Name returns the name of the brokerage.
-func (b *Brokerage) Name() string {
-	return "Tradier"
-}
