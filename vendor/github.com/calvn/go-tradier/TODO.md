@@ -102,3 +102,16 @@ Structs that are basically wrappers around slices (i.e. `Orders`) could be turne
 | DELETE watchlists/{id}/symbols | ✓        |               |      |
 
 ## Streaming endpoints
+
+## Issues
+
+Unmarshaling the  object from `/user/orders`  returns JSON with orders object double wrapped:
+```
+"orders": {
+  "orders": {
+    "order": [
+      ...
+    ]
+  }
+}
+```

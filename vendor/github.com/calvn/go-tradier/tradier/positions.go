@@ -2,13 +2,12 @@ package tradier
 
 import (
 	"encoding/json"
+	"log"
 	"time"
 )
 
 // Positions represents the positions JSON object.
-type Positions struct {
-	Position []Position `json:"position,omitempty"`
-}
+type Positions []*Position
 
 type positions Positions
 
@@ -17,56 +16,72 @@ type Position struct {
 	CostBasis    *float64   `json:"cost_basis,omitempty"`
 	DateAcquired *time.Time `json:"date_acquired,omitempty"`
 	ID           *int       `json:"id,omitempty"`
-	Quantity     *int       `json:"quantity,omitempty"`
+	Quantity     *float64   `json:"quantity,omitempty"`
 	Symbol       *string    `json:"symbol,omitempty"`
 }
 
-type position struct {
-	*Position `json:"position,omitempty"`
-}
-
 // UnmarshalJSON unmarshals positions into Positions object.
-func (p *Positions) UnmarshalJSON(b []byte) (err error) {
-	positionsStr := ""
-	positionsObj := positions{}
-	positionObj := position{}
+func (p *Positions) UnmarshalJSON(b []byte) error {
+	var posCol struct {
+		P struct {
+			P []*Position `json:"position,omitempty"`
+		} `json:"positions,omitempty"`
+	}
+	var posObj struct {
+		P struct {
+			P *Position `json:"position,omitempty"`
+		} `json:"positions,omitempty"`
+	}
+	var posStr struct {
+		P string `json:"positions,omitempty"`
+	}
+	var err error
 
-	// If position is a string, i.e. "null"
-	if err = json.Unmarshal(b, &positionsStr); err == nil {
+	// If positions is null
+	if err = json.Unmarshal(b, &posStr); err == nil {
 		return nil
 	}
 
-	// If position is an array
-	if err = json.Unmarshal(b, &positionsObj); err == nil {
-		*p = Positions(positionsObj)
+	// If watchlist is a JSON array
+	if err = json.Unmarshal(b, &posCol); err == nil {
+		*p = posCol.P.P
 		return nil
 	}
 
-	// If position is an object
-	if err = json.Unmarshal(b, &positionObj); err == nil {
-		*p = Positions{
-			Position: []Position{*positionObj.Position},
-		}
+	// If watchlist is a single object
+	if err = json.Unmarshal(b, &posObj); err == nil {
+		pos := make([]*Position, 1)
+		pos[0] = posObj.P.P
+		*p = Positions(pos)
 		return nil
 	}
 
-	return nil
+	return err
 }
 
 // MarshalJSON marshals Positions into JSON.
 func (p *Positions) MarshalJSON() ([]byte, error) {
+	log.Printf("%+v\n", p)
 	// If []Position is empty
-	if len(p.Position) == 0 {
-		return json.Marshal("null")
-	}
-
-	// If []Position is size 1, return first and only object
-	if len(p.Position) == 1 {
+	if len(*p) == 0 {
 		return json.Marshal(map[string]interface{}{
-			"position": p.Position[0],
+			"positions": "null",
 		})
 	}
 
-	// Otherwise mashal entire Positions object normally
-	return json.Marshal(*p)
+	// If []Position is size 1, return first and only object
+	if len(*p) == 1 {
+		return json.Marshal(map[string]interface{}{
+			"positions": map[string]interface{}{
+				"position": *(*p)[0],
+			},
+		})
+	}
+
+	// Otherwise wrap and mashal normally
+	return json.Marshal(map[string]interface{}{
+		"positions": map[string]interface{}{
+			"position": *p,
+		},
+	})
 }

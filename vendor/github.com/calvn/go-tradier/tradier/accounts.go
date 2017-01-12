@@ -13,7 +13,7 @@ type Account struct {
 	AccountNumber *string `json:"account_number,omitempty"`
 
 	// Specific to orders
-	Orders *Orders `json:"orders,omitempty"`
+	Orders *AccountOrders `json:"orders,omitempty"`
 
 	// Specific to profile
 	Classification *string    `json:"classification,omitempty"`

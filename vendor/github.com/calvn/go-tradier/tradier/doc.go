@@ -25,7 +25,7 @@ Usage:
 
 Getting started
 
-The quickest way to get started is to request a non-expiring access token (or more formally, a refresh token) from Tradier. Initantiate a new Tradier client and provide an http.Client that has the proper access token. Use the different services to call specific endpoints.
+The quickest way to get started is to request a non-expiring access token (or more formally, a refresh token) from Tradier. Initantiate a new *tradier.Client and provide an http.Client that can properly handle access token, such as one returned from the oauth2 library. Afterwards, you can use the different services to call specific endpoints.
 
     import "golang.org/x/oauth2"
 

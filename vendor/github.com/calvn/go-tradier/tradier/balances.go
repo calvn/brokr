@@ -1,5 +1,7 @@
 package tradier
 
+import "encoding/json"
+
 // Balances represents the balances object.
 type Balances struct {
 	AccountNumber *string `json:"account_number,omitempty"`
@@ -45,4 +47,38 @@ type Balances struct {
 	UnclearedFunds     *float64 `json:"uncleared_funds,omitempty"`
 	TotalCash          *float64 `json:"total_cash,omitempty"`
 	TotalEquity        *float64 `json:"total_equity,omitempty"`
+}
+
+type balances Balances
+
+// UnmarshalJSON unmarshals balances into *Balances object.
+func (bal *Balances) UnmarshalJSON(b []byte) error {
+	var br struct {
+		*balances `json:"balances,omitempty"`
+	}
+	balObj := balances{}
+	var err error
+
+	// If wrapped
+	if err = json.Unmarshal(b, &br); err == nil {
+		if br.balances != nil {
+			*bal = Balances(*br.balances)
+			return nil
+		}
+	}
+
+	// If not wrapped in anything
+	if err = json.Unmarshal(b, &balObj); err == nil {
+		*bal = Balances(balObj)
+		return nil
+	}
+
+	return err
+}
+
+// MarshalJSON marshals *Balances into its JSON representation
+func (bal *Balances) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"balances": *bal,
+	})
 }

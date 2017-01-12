@@ -7,7 +7,7 @@ import (
 
 // GainLoss represents the gainloss object.
 type GainLoss struct {
-	ClosedPosition []ClosedPosition `json:"closed_position,omitempty"`
+	ClosedPosition []*ClosedPosition `json:"closed_position,omitempty"`
 }
 
 type gainLoss GainLoss
@@ -49,7 +49,7 @@ func (g *GainLoss) UnmarshalJSON(b []byte) (err error) {
 	// If closed_position is an object
 	if err = json.Unmarshal(b, &closedPositionObj); err == nil {
 		*g = GainLoss{
-			ClosedPosition: []ClosedPosition{*closedPositionObj.ClosedPosition},
+			ClosedPosition: []*ClosedPosition{closedPositionObj.ClosedPosition},
 		}
 		return nil
 	}

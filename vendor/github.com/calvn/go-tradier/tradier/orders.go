@@ -8,6 +8,9 @@ import (
 // Orders represents the orders JSON object.
 type Orders []*Order
 
+// AccountOrders is used to hold user orders
+type AccountOrders Orders
+
 // Order represents the `order` JSON object.
 type Order struct {
 	AvgFillPrice      *float64   `json:"avg_fill_price,omitempty"`
@@ -79,6 +82,7 @@ func (o *Order) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON unmarshals orders into Orders object.
 func (o *Orders) UnmarshalJSON(b []byte) (err error) {
+	// fmt.Println(string(b))
 	var oCollection struct {
 		O struct {
 			O []*Order `json:"order,omitempty"`
@@ -101,14 +105,18 @@ func (o *Orders) UnmarshalJSON(b []byte) (err error) {
 
 	// If unwrapped from user object
 	if err = json.Unmarshal(b, &oUnwrapped); err == nil {
-		*o = oUnwrapped.O
-		return nil
+		if len(oUnwrapped.O) > 0 {
+			*o = oUnwrapped.O
+			return nil
+		}
 	}
 
 	// If unwrapped from user object
 	if err = json.Unmarshal(b, &oSingle); err == nil {
-		*o = Orders{oSingle.O}
-		return nil
+		if oSingle.O != nil {
+			*o = Orders{oSingle.O}
+			return nil
+		}
 	}
 
 	// If order is a string, i.e. "null"
@@ -135,6 +143,99 @@ func (o *Orders) UnmarshalJSON(b []byte) (err error) {
 
 // MarshalJSON marshals Orders into JSON.
 func (o *Orders) MarshalJSON() ([]byte, error) {
+	// Set wrapped to true to marshal differently
+	for _, order := range *o {
+		order.unwrapped = true
+	}
+
+	// If []Watchlist is empty
+	if len(*o) == 0 {
+		return json.Marshal(map[string]interface{}{
+			"orders": "null",
+		})
+	}
+
+	// If []Watchlist is size 1, return first and only object
+	if len(*o) == 1 {
+		order := *o
+		return json.Marshal(map[string]interface{}{
+			"orders": map[string]interface{}{
+				"order": order[0],
+			},
+		})
+	}
+
+	// Otherwhise marshal normally
+	return json.Marshal(map[string]interface{}{
+		"orders": map[string]interface{}{
+			"order": *o,
+		},
+	})
+}
+
+// UnmarshalJSON unmarshals orders into Orders object.
+func (o *AccountOrders) UnmarshalJSON(b []byte) (err error) {
+	// fmt.Println(string(b))
+	var oCollection struct {
+		O struct {
+			O []*Order `json:"order,omitempty"`
+		} `json:"orders,omitempty"`
+	}
+	var oObject struct {
+		O struct {
+			O *Order `json:"order,omitempty"`
+		} `json:"orders,omitempty"`
+	}
+	var oNull string
+
+	var oUnwrapped struct {
+		O []*Order `json:"order,omitempty"`
+	}
+
+	var oSingle struct {
+		O *Order `json:"order,omitempty"`
+	}
+
+	// If unwrapped from user object
+	if err = json.Unmarshal(b, &oUnwrapped); err == nil {
+		if len(oUnwrapped.O) > 0 {
+			*o = oUnwrapped.O
+			return nil
+		}
+	}
+
+	// If unwrapped from user object
+	if err = json.Unmarshal(b, &oSingle); err == nil {
+		if oSingle.O != nil {
+			*o = AccountOrders{oSingle.O}
+			return nil
+		}
+	}
+
+	// If order is a string, i.e. "null"
+	if err = json.Unmarshal(b, &oNull); err == nil {
+		return nil
+	}
+
+	// If order is a JSON array
+	if err = json.Unmarshal(b, &oCollection); err == nil {
+		*o = oCollection.O.O
+		return nil
+	}
+
+	// If order is an object
+	if err = json.Unmarshal(b, &oObject); err == nil {
+		tmp := make([]*Order, 0)
+		tmp = append(tmp, oObject.O.O)
+		*o = AccountOrders(tmp)
+		return nil
+	}
+
+	return nil
+}
+
+// MarshalJSON marshals Orders into JSON.
+func (o *AccountOrders) MarshalJSON() ([]byte, error) {
 	// Set wrapped to true to marshal differently
 	for _, order := range *o {
 		order.unwrapped = true

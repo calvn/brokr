@@ -1,7 +1,22 @@
 # TODO
 Laundry list
 
-## config
+## commands
+- [x] config
+- [x] info
+- [x] quote
+- [x] buy
+- [x] sell
+- [x] cancel
+- [x] orders
+- [ ] positions
+- [ ] buy open
+- [ ] sell open
+- [ ] buy close
+- [ ] sell close
+
+
+### config
 - [x] Initialize config file
 - [x] Merge existing config file
 - [x] Merge flag, env, and config file settings in priority
@@ -11,24 +26,26 @@ Laundry list
 - [x] fix brokerage interface to take in appropriate config
 
 #### defaults
+- [x] Subcommands should print help if no other values provided
 - [x] Ability to toggle preview-order (default should be set to true)
 - [x] Attempt to set default account if there is only one account number
 - [ ] Set sane defaults for placing orders
   - [ ] Day expiry by default
   - [x] Preview order *enabled* by default
 
-## quotes
+### quotes
+- [x] Basic functionality
 - [ ] Better output view
   - [ ] Possibly render from template
 - [ ] Colorize/symbolize delta changes
 - [ ] Simple quote by default (symbol, price, change, date)
 - [ ] Verbose option to output more info
 
-## info
+### info
 - [ ] Display current remaining rate limits
 - [x] Display current configuration, shortcut to `cat ~/.brokr.yaml`
 
-## account
+### account
 - [ ] Display all accounts under the user
   - [ ] `$ brokr accounts`
   - [ ] Mark account that is currently in use
@@ -43,8 +60,8 @@ Laundry list
 - [ ] Change to use `account #`
   - [ ] `$ brokr account use 123456`
 
-## orders/order/cancel
-- [ ] Display all orders
+### orders/order/cancel
+- [x] Display all orders
   - `$ brokr orders`
 - [ ] Display pending orders
   - `$ brokr orders pending`
@@ -53,11 +70,10 @@ Laundry list
 - [ ] Cancel order 812
   - `$ brokr order cancel 812`
 
-## positions
+### positions
 `$ brokr positions`
 
-## commands
-- [x] Subcommands should print help if no other values provided
+### version
 - [x] Version for more verbose info (e.g. go version, built time, os/arch)
 
 ## placing orders

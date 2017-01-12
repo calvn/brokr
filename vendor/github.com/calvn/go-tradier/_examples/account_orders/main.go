@@ -27,12 +27,12 @@ func main() {
 
 	client := tradier.NewClient(tc)
 
-	balances, _, err := client.Account.Balances("6YA05708")
+	orders, _, err := client.Account.Orders("6YA05708")
 	if err != nil {
 		log.Fatalf("Error fetching order: %s", err)
 	}
 
-	payload, err := json.Marshal(balances)
+	payload, err := json.Marshal(orders)
 	if err != nil {
 		log.Fatalf("Error marshaling orders to JSON: %s", err)
 	}

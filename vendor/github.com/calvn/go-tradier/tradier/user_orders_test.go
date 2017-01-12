@@ -71,7 +71,7 @@ var wantUserOrders = &User{
 	Accounts: &Accounts{
 		{
 			AccountNumber: String("6YA05991"),
-			Orders: &Orders{
+			Orders: &AccountOrders{
 				{
 					ID:                Int(182042),
 					Type:              String("market"),
@@ -93,7 +93,7 @@ var wantUserOrders = &User{
 		},
 		{
 			AccountNumber: String("6YA05708"),
-			Orders:        &Orders{},
+			Orders:        &AccountOrders{},
 		},
 	},
 }
