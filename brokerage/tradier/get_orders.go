@@ -2,23 +2,18 @@ package tradier
 
 import (
 	"bytes"
-	"html/template"
+	"text/template"
 
-	"github.com/calvn/go-tradier/tradier"
+	"github.com/calvn/brokr/brokerage/tradier/templates"
 )
 
 func (b *Brokerage) GetOrders() (string, error) {
-	account, _, err := b.client.Account.Orders(*b.AccountID)
+	orders, _, err := b.client.Account.Orders(*b.AccountID)
 	if err != nil {
 		return "", err
 	}
 
-	var orders *tradier.Orders
-	if account.Orders != nil {
-		orders = account.Orders
-	}
-
-	tmpl := template.Must(template.New("").Parse(ordersTemplate))
+	tmpl := template.Must(template.New("").Parse(templates.OrdersTemplate))
 	var out bytes.Buffer
 
 	tmpl.Execute(&out, orders)

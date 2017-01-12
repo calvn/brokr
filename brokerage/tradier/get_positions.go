@@ -1,14 +1,23 @@
 package tradier
 
-import "fmt"
+import (
+	"bytes"
+	"text/template"
 
-func (b *Brokerage) GetPositions() error {
-	account, _, err := b.client.Account.Positions(*b.AccountID)
+	"github.com/calvn/brokr/brokerage/tradier/templates"
+)
+
+func (b *Brokerage) GetPositions() (string, error) {
+	positions, _, err := b.client.Account.Positions(*b.AccountID)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	fmt.Println(account.Positions)
+	tmpl := template.Must(template.New("").Parse(templates.PositionsTemplate))
+	var out bytes.Buffer
 
-	return nil
+	tmpl.Execute(&out, positions)
+	output := out.String()
+
+	return output, nil
 }

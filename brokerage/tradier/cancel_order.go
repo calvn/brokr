@@ -2,7 +2,9 @@ package tradier
 
 import (
 	"bytes"
-	"html/template"
+	"text/template"
+
+	"github.com/calvn/brokr/brokerage/tradier/templates"
 )
 
 // CancelOrder cancels pending orders
@@ -17,7 +19,7 @@ func (b *Brokerage) CancelOrder(orderIDs []string) (string, error) {
 		}
 
 		var out bytes.Buffer
-		tmpl := template.Must(template.New("").Parse(orderTemplate))
+		tmpl := template.Must(template.New("").Parse(templates.OrderTemplate))
 		tmpl.Execute(&out, order)
 
 		output += out.String()

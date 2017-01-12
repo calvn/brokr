@@ -2,8 +2,9 @@ package tradier
 
 import (
 	"bytes"
-	"html/template"
+	"text/template"
 
+	"github.com/calvn/brokr/brokerage/tradier/templates"
 	"github.com/calvn/go-tradier/tradier"
 )
 
@@ -30,7 +31,7 @@ func (b *Brokerage) CreateOrder(preview bool, class, symbol, duration, side stri
 		return "", err
 	}
 
-	tmpl := template.Must(template.New("").Parse(orderTemplate))
+	tmpl := template.Must(template.New("").Parse(templates.OrderTemplate))
 	var out bytes.Buffer
 
 	tmpl.Execute(&out, order)

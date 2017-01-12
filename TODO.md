@@ -35,6 +35,9 @@ Laundry list
 
 ### quotes
 - [x] Basic functionality
+- [x] Render from template
+- [x] Correctly display time as non-epoch values
+- [x] Correctly set precision to two decimal values
 - [ ] Better output view
   - [ ] Possibly render from template
 - [ ] Colorize/symbolize delta changes

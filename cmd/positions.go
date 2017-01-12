@@ -25,14 +25,18 @@ func newPositionsCmd() *cobra.Command {
 		Use:   "positions",
 		Short: "Get positions for an account",
 		Long:  `Get positions for an account`,
-		Run:   positionsCmdFunc,
+		RunE:  positionsCmdFunc,
 	}
 
 	return cmd
 }
 
-func positionsCmdFunc(cmd *cobra.Command, args []string) {
-	if err := brokrRunner.GetPositions(); err != nil {
-		fmt.Println(err)
+func positionsCmdFunc(cmd *cobra.Command, args []string) error {
+	output, err := brokrRunner.GetPositions()
+	if err != nil {
+		return err
 	}
+
+	fmt.Println(output)
+	return nil
 }
