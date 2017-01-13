@@ -1,14 +1,18 @@
 package templates
 
 const (
-	QuotesTemplate = `{{range .}}Symbol: {{.Symbol}}
-  Last:      {{derefFloat .Last | printf "%.2f" }}
-  PrevClose: {{derefFloat .Prevclose | printf "%.2f"}}
-  Change:    {{derefFloat .Change | printf "%.2f"}} ({{derefFloat .ChangePercentage | printf "%.2f"}}%)
-  Low:       {{derefFloat .Low | printf "%.2f"}}
-  High:      {{derefFloat .High | printf "%.2f"}}
-  Updated:   {{parseDate .TradeDate}}
-	{{- end}}`
+	QuotesTemplate = `{{range $i, $e := . -}}
+Symbol: {{.Symbol}}
+  Last:      {{derefFloat $e.Last | printf "%.2f" }}
+  PrevClose: {{derefFloat $e.Prevclose | printf "%.2f"}}
+  Change:    {{derefFloat $e.Change | printf "%.2f"}} ({{derefFloat $e.ChangePercentage | printf "%.2f"}}%)
+  Low:       {{derefFloat $e.Low | printf "%.2f"}}
+  High:      {{derefFloat $e.High | printf "%.2f"}}
+  Updated:   {{parseDate $e.TradeDate}}
+{{- if (ne ($i + 1) (len $list))}}
+{{- println "."}}
+{{- end}}
+{{- end}}` // Only once
 
 	OrderTemplate = `{{if .Symbol -}}
   Preview order:
