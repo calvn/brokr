@@ -1,12 +1,12 @@
 hash: 6cd82f1cdaa1c91eb4b57b8708768911ad2d75b2f9b3e3ce874bb5f213af77f3
-updated: 2017-01-11T02:32:59.03372886-05:00
+updated: 2017-01-15T16:46:07.844438838-05:00
 imports:
 - name: github.com/alecthomas/template
   version: a0175ee3bccc567396460bf5acd36800cb10c49c
   subpackages:
   - parse
 - name: github.com/calvn/go-tradier
-  version: 7680f2deba4e4228d46d263e6be5cd6d0437fa1b
+  version: d49f78149b82837edfa07f5cb81d464e6a674390
   subpackages:
   - tradier
   - tradier/errors
@@ -34,7 +34,7 @@ imports:
 - name: github.com/inconshreveable/mousetrap
   version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
 - name: github.com/magiconair/properties
-  version: 9c47895dc1ce54302908ab8a43385d1f5df2c11c
+  version: b3b15ef068fd0b17ddf408a23669f20811d194d2
 - name: github.com/mitchellh/go-homedir
   version: b8bc1bf767474819792c23f32d8286a45736f1c6
 - name: github.com/mitchellh/mapstructure
@@ -58,7 +58,7 @@ imports:
 - name: github.com/spf13/viper
   version: 5ed0fc31f7f453625df314d8e66b9791e8d13003
 - name: golang.org/x/net
-  version: 60c41d1de8da134c05b7b40154a9a82bf5b7edb9
+  version: f2499483f923065a842d38eb4c7f1927e6fc6e6d
   subpackages:
   - context
 - name: golang.org/x/oauth2
@@ -70,12 +70,12 @@ imports:
   subpackages:
   - unix
 - name: golang.org/x/text
-  version: 44f4f658a783b0cee41fe0a23b8fc91d9c120558
+  version: f72d8390a633d5dfb0cc84043294db9f6c935756
   subpackages:
   - transform
   - unicode/norm
 - name: google.golang.org/appengine
-  version: 8758a385849434ba5eac8aeedcf5192c5a0f5f10
+  version: 9e2ad0873f358c54296ccdc5116b0652c98226d1
   subpackages:
   - internal
   - internal/base

@@ -33,25 +33,46 @@ func (e *Errors) AppendStrings(errorStrings []string) {
 
 // UnmarshalJSON unmarshals errors into Errors object.
 func (e *Errors) UnmarshalJSON(b []byte) error {
-	var eWrapper struct {
+	var eCol struct {
 		E struct {
 			E []string `json:"error"`
 		} `json:"errors"`
 	}
+	var eObj struct {
+		E struct {
+			E string `json:"error,omitempty"`
+		} `json:"errors,omitempty"`
+	}
+	var err error
 
-	// Allows Errors to be unmarshalled without being wrapped in a parent struct
-	if err := json.Unmarshal(b, &eWrapper); err == nil {
-		e.AppendStrings(eWrapper.E.E)
+	// If error is wrapped in an array
+	if err = json.Unmarshal(b, &eCol); err == nil {
+		e.AppendStrings(eCol.E.E)
 		return nil
 	}
 
-	return nil
-	// return json.Unmarshal(b, e)
+	// If error is wrapped in an object
+	if err = json.Unmarshal(b, &eObj); err == nil {
+		e.AppendStrings([]string{eObj.E.E})
+		return nil
+	}
+
+	return err
 }
 
 // MarshalJSON marshals Errors into its JSON representation.
 func (e *Errors) MarshalJSON() ([]byte, error) {
+	if len(e.Err) == 1 {
+		return json.Marshal(map[string]interface{}{
+			"errors": map[string]interface{}{
+				"error": (*e).Err[0],
+			},
+		})
+	}
+
 	return json.Marshal(map[string]interface{}{
-		"errors": *e,
+		"errors": map[string]interface{}{
+			"error": *e,
+		},
 	})
 }
