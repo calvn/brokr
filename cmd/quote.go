@@ -35,7 +35,7 @@ func newQuoteCmd() *cobra.Command {
 
 func quoteCmdFunc(cmd *cobra.Command, args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("No symbols provided\n")
+		return fmt.Errorf("No ticker symbols provided\n")
 	}
 
 	output, err := brokrRunner.GetQuotes(args)

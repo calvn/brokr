@@ -13,6 +13,7 @@ type Broker interface {
 
 	// CreateOrder accepts: isPreview, class, symbol, duration, side, amount, type, limit/stop price
 	CreateOrder(bool, string, string, string, string, int, string, float64) (string, error)
+	GetOrder(string) (string, error)
 	CancelOrder([]string) (string, error)
 }
 

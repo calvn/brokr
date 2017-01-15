@@ -77,6 +77,7 @@ func init() {
 		newSellCmd(),
 		newCancelCmd(),
 		newOrdersCmd(),
+		newOrderCmd(),
 		newPositionsCmd(),
 		newInfoCmd(),
 		newVersionCmd(),

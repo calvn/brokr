@@ -2,6 +2,7 @@ package tradier
 
 import (
 	"bytes"
+	"strconv"
 	"text/template"
 
 	"github.com/calvn/brokr/brokerage/tradier/templates"
@@ -31,7 +32,13 @@ func (b *Brokerage) CreateOrder(preview bool, class, symbol, duration, side stri
 		return "", err
 	}
 
-	tmpl := template.Must(template.New("").Parse(templates.OrderTemplate))
+	// If not a previerw, return the order details
+	if !params.Preview {
+		id := strconv.Itoa(*order.ID)
+		return b.GetOrder(id)
+	}
+
+	tmpl := template.Must(template.New("").Funcs(templates.FuncMap()).Parse(templates.OrderPreviewTemplate))
 	var out bytes.Buffer
 
 	tmpl.Execute(&out, order)
