@@ -9,7 +9,7 @@ Laundry list
 - [x] sell
 - [x] cancel
 - [x] orders
-- [ ] positions
+- [x] positions
 - [ ] buy open
 - [ ] sell open
 - [ ] buy close
@@ -32,17 +32,18 @@ Laundry list
 - [ ] Set sane defaults for placing orders
   - [ ] Day expiry by default
   - [x] Preview order *enabled* by default
+- [ ] Errors from commands should not return back `--help`
 
 ### quotes
 - [x] Basic functionality
 - [x] Render from template
 - [x] Correctly display time as non-epoch values
 - [x] Correctly set precision to two decimal values
-- [ ] Better output view
-  - [ ] Possibly render from template
+- [x] Better output view
+  - [x] Possibly render from template
 - [ ] Colorize/symbolize delta changes
 - [ ] Simple quote by default (symbol, price, change, date)
-- [ ] Verbose option to output more info
+  - [ ] Verbose option to output more info
 
 ### info
 - [ ] Display current remaining rate limits

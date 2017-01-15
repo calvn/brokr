@@ -25,8 +25,8 @@ func newQuoteCmd() *cobra.Command {
 		Use:     "quote [SYMBOL...]",
 		Aliases: []string{"q"},
 		Short:   "Get quotes from a set of symbols",
-		Long: `Get quotes from a set of symbols.
-	Example: brokr quote aapl googl`,
+		Long: `Get quotes from a set of ticker symbols.
+  Example: brokr quote aapl googl`,
 		RunE: quoteCmdFunc,
 	}
 

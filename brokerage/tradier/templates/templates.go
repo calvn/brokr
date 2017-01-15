@@ -1,7 +1,7 @@
 package templates
 
 const (
-	QuotesTemplate = `{{range $i, $e := . -}}
+	QuotesTemplate = `{{$list := .}}{{range $i, $e := . -}}
 Symbol: {{.Symbol}}
   Last:      {{derefFloat $e.Last | printf "%.2f" }}
   PrevClose: {{derefFloat $e.Prevclose | printf "%.2f"}}
@@ -9,10 +9,10 @@ Symbol: {{.Symbol}}
   Low:       {{derefFloat $e.Low | printf "%.2f"}}
   High:      {{derefFloat $e.High | printf "%.2f"}}
   Updated:   {{parseDate $e.TradeDate}}
-{{- if (ne ($i + 1) (len $list))}}
-{{- println "."}}
+{{- if and (ne (add $i 1) (len $list)) (ne (len $list) 1)}}
+{{- println}}
 {{- end}}
-{{- end}}` // Only once
+{{- end}}`
 
 	OrderTemplate = `{{if .Symbol -}}
   Preview order:
