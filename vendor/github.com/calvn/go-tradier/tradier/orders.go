@@ -38,6 +38,7 @@ type Order struct {
 	ExtendedHours *bool    `json:"extended_hours,omitempty"`
 	Fees          *float64 `json:"fees,omitempty"`
 	MarginChange  *float64 `json:"margin_change,omitempty"`
+	OrderCost     *float64 `json:"order_cost,omitempty"`
 	Result        *bool    `json:"result,omitempty"`   // Not present in documentation
 	Strategy      *string  `json:"strategy,omitempty"` // Not present in documentation, specific to multileg
 	unwrapped     bool
