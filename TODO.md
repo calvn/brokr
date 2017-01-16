@@ -69,10 +69,10 @@ Laundry list
   - `$ brokr orders`
 - [ ] Display pending orders
   - `$ brokr orders pending`
-- [ ] Display order 812
+- [x] Display order 812
   - `$ brokr order 812`
-- [ ] Cancel order 812
-  - `$ brokr order cancel 812`
+- [x] Cancel order 812
+  - `$ brokr cancel 812`
 
 ### positions
 `$ brokr positions`

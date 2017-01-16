@@ -15,10 +15,10 @@ Symbol: {{.Symbol}}
 {{- end}}`
 
 	OrderTemplate = `{{rpad "ID" 10}}{{rpad "SYMBOL" 10}}{{rpad "SIDE" 10}}{{rpad "TYPE" 10}}{{rpad "DURATION" 10}}{{rpad "STATUS" 10}}FILLED/QTY
-{{rpad (stringify .ID) 10}}{{rpad (stringify .Symbol) 10}}{{rpad (stringify .Side) 10}}{{rpad (stringify .Type) 10}}{{rpad (stringify .Duration) 10}}{{rpad (stringify .Status) 10}}{{subtract .Quantity .RemainingQuantity}}/{{.Quantity}}`
+{{rpad (stringify .ID) 10}}{{rpad (stringify .Symbol) 10}}{{rpad (stringify .Side) 10}}{{rpad (stringify .Type) 10}}{{rpad (stringify .Duration) 10}}{{rpad (stringify .Status) 10}}{{.Filled}}/{{.Quantity}}`
 
-	OrderPreviewTemplate = `{{rpad "SYMBOL" 10}}{{rpad "SIDE" 10}}{{rpad "TYPE" 10}}{{rpad "DURATION" 10}}{{rpad "STATUS" 10}}PREVIEW
-{{rpad (stringify .Symbol) 10}}{{rpad (stringify .Side) 10}}{{rpad (stringify .Type) 10}}{{rpad (stringify .Duration) 10}}{{rpad (stringify .Status) 10}}true`
+	OrderPreviewTemplate = `{{rpad "SYMBOL" 10}}{{rpad "SIDE" 10}}{{rpad "TYPE" 10}}{{rpad "DURATION" 10}}{{rpad "COMM./COST" 15}}EST. TOTAL
+{{rpad (stringify .Symbol) 10}}{{rpad (stringify .Side) 10}}{{rpad (stringify .Type) 10}}{{rpad (stringify .Duration) 10}}{{rpad (printf "%s/%s" (stringify .Commission) (stringify .OrderCost)) 15}}{{.Cost}}`
 
 	// OrderTemplate = `{{if .Symbol -}}
 	// Preview order:
@@ -50,23 +50,13 @@ Symbol: {{.Symbol}}
 	//   Status: {{.Status}}
 	// {{- end}}`
 
-	OrdersTemplate = `Orders:
-  {{- range . -}}
-  {{- if .ID}}
-  ID: {{.ID}}
-  {{- end}}
-  {{- if .Status}}
-    Status: {{.Status}}
-  {{- end}}
-  {{- end}}`
+	OrdersTemplate = `{{rpad "ID" 10}}{{rpad "SYMBOL" 10}}{{rpad "SIDE" 10}}{{rpad "TYPE" 10}}{{rpad "DURATION" 10}}{{rpad "STATUS" 10}}FILLED/QTY
+{{- range .}}
+{{rpad (stringify .ID) 10}}{{rpad (stringify .Symbol) 10}}{{rpad (stringify .Side) 10}}{{rpad (stringify .Type) 10}}{{rpad (stringify .Duration) 10}}{{rpad (stringify .Status) 10}}{{.Filled}}/{{.Quantity}}
+{{- end}}`
 
-	PositionsTemplate = `Positions:
-  {{- range . -}}
-  {{- if .Symbol}}
-  Symbol: {{.Symbol}}
-  {{- end}}
-  {{- if .Status}}
-    Status: {{.Status}}
-  {{- end}}
-  {{- end}}`
+	PositionsTemplate = `{{rpad "ID" 10}}{{rpad "SYMBOL" 10}}{{rpad "QUANTITY" 10}}{{rpad "LAST" 10}}{{rpad "CHANGE(%)" 10}}{{rpad "VALUE" 10}}{{rpad "BASIS" 10}}GL(%)
+{{- range .}}
+{{rpad (stringify .ID) 10}}{{rpad (stringify .Symbol) 10}}{{rpad (stringify .Quantity) 10}}{{rpad "" 10}}{{rpad "" 10}}{{rpad "" 10}}{{rpad (stringify .CostBasis) 10}}
+{{- end}}`
 )

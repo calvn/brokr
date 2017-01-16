@@ -2,28 +2,39 @@ package tradier
 
 import (
 	"bytes"
+	"strconv"
 	"text/template"
 
+	"github.com/calvn/brokr/brokerage/tradier/structs"
 	"github.com/calvn/brokr/brokerage/tradier/templates"
+	"github.com/calvn/go-tradier/tradier"
 )
 
 // CancelOrder cancels pending orders
 func (b *Brokerage) CancelOrder(orderIDs []string) (string, error) {
-	output := ""
-
-	// FIXME: Append error to output
+	// FIXME: Handle errors gracefully. Log on errors and continue on cancelled orders
+	orders := &tradier.Orders{}
 	for _, id := range orderIDs {
-		order, _, err := b.client.Order.Delete(*b.AccountID, id)
+		_order, _, err := b.client.Order.Delete(*b.AccountID, id)
 		if err != nil {
 			return "", err
 		}
 
-		var out bytes.Buffer
-		tmpl := template.Must(template.New("").Parse(templates.OrderTemplate))
-		tmpl.Execute(&out, order)
+		_id := strconv.Itoa(*_order.ID)
+		order, _, err := b.client.Account.OrderStatus(*b.AccountID, _id)
+		if err != nil {
+			return "", err
+		}
 
-		output += out.String()
+		*orders = append(*orders, order)
 	}
+	ot := structs.NewOrdersTemplater(orders)
+
+	tmpl := template.Must(template.New("").Funcs(templates.FuncMap()).Parse(templates.OrdersTemplate))
+	var out bytes.Buffer
+
+	tmpl.Execute(&out, ot)
+	output := out.String()
 
 	return output, nil
 }

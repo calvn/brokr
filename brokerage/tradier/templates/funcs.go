@@ -30,6 +30,8 @@ func stringify(v interface{}) string {
 		switch rv.Kind() {
 		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 			return strconv.FormatInt(rv.Int(), 10)
+		case reflect.Float32, reflect.Float64:
+			return strconv.FormatFloat(rv.Float(), 'f', 2, 64)
 		case reflect.String:
 			return rv.String()
 		}

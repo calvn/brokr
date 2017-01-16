@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"text/template"
 
+	"github.com/calvn/brokr/brokerage/tradier/structs"
 	"github.com/calvn/brokr/brokerage/tradier/templates"
 )
 
@@ -13,10 +14,13 @@ func (b *Brokerage) GetOrders() (string, error) {
 		return "", err
 	}
 
-	tmpl := template.Must(template.New("").Parse(templates.OrdersTemplate))
+	// Done to include the amount filled so far
+	ot := structs.NewOrdersTemplater(orders)
+
+	tmpl := template.Must(template.New("").Funcs(templates.FuncMap()).Parse(templates.OrdersTemplate))
 	var out bytes.Buffer
 
-	tmpl.Execute(&out, orders)
+	tmpl.Execute(&out, ot)
 	output := out.String()
 
 	return output, nil
