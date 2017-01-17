@@ -39,3 +39,7 @@ build: generate
 
 build-linux: create-build-image remove-dangling build-native
 .PHONY: build-linux
+
+generate-gif:
+	@echo "To generate the GIF from asciicast file, get https://github.com/pettarin/asciicast2gif and then run:"
+	@echo "$$ ./asciicast2gif brokr_demo.json brokr_demo.gif --fps=20 --theme=monokai --size=medium --speed=0.5"
