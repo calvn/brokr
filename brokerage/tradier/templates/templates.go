@@ -25,8 +25,8 @@ Symbol: {{.Symbol}}
 {{rpad (stringify .ID) 10}}{{rpad (stringify .Symbol) 10}}{{rpad (stringify .Side) 10}}{{rpad (stringify .Type) 10}}{{rpad (stringify .Duration) 10}}{{rpad (stringify .Status) 10}}{{.Filled}}/{{.Quantity}}
 {{- end}}`
 
-	PositionsTemplate = `{{rpad "ID" 10}}{{rpad "SYMBOL" 10}}{{rpad "QUANTITY" 10}}{{rpad "LAST" 10}}{{rpad "CHANGE(%)" 10}}{{rpad "VALUE" 10}}{{rpad "BASIS" 10}}GL(%)
+	PositionsTemplate = `{{rpad "ID" 10}}{{rpad "SYMBOL" 10}}{{rpad "QUANTITY" 10}}{{rpad "LAST" 10}}{{rpad "CHANGE (%)" 18}}{{rpad "VALUE" 12}}{{rpad "BASIS" 12}}GL (%)
 {{- range .}}
-{{rpad (stringify .ID) 10}}{{rpad (stringify .Symbol) 10}}{{rpad (stringify .Quantity) 10}}{{rpad "" 10}}{{rpad "" 10}}{{rpad "" 10}}{{rpad (stringify .CostBasis) 10}}
+{{rpad (stringify .ID) 10}}{{rpad (stringify .Symbol) 10}}{{rpad (stringify .Quantity) 10}}{{rpad (stringify .Last) 10}}{{rpad (printf "%s (%s%%)" (stringify .Change) (stringify .ChangePercentage)) 18}}{{rpad (stringify .Value) 12}}{{rpad (stringify .CostBasis) 12}}{{.GainLoss}} ({{( stringify .GainLossPercentage)}}%)
 {{- end}}`
 )
