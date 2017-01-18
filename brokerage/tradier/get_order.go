@@ -8,6 +8,7 @@ import (
 	"github.com/calvn/brokr/brokerage/tradier/templates"
 )
 
+// GetOrder fetches a specific order and returns information about it.
 func (b *Brokerage) GetOrder(id string) (string, error) {
 	order, _, err := b.client.Account.OrderStatus(*b.AccountID, id)
 	if err != nil {
@@ -15,12 +16,12 @@ func (b *Brokerage) GetOrder(id string) (string, error) {
 	}
 
 	// Done to include the amount filled so far
-	ot := structs.NewOrderTemplater(order)
+	ow := structs.NewOrderWrapper(order)
 
 	tmpl := template.Must(template.New("").Funcs(templates.FuncMap()).Parse(templates.OrderTemplate))
 	var out bytes.Buffer
 
-	tmpl.Execute(&out, ot)
+	tmpl.Execute(&out, ow)
 	output := out.String()
 
 	return output, nil

@@ -28,12 +28,12 @@ func (b *Brokerage) CancelOrder(orderIDs []string) (string, error) {
 
 		*orders = append(*orders, order)
 	}
-	ot := structs.NewOrdersTemplater(orders)
+	ow := structs.NewOrdersWrapper(orders)
 
 	tmpl := template.Must(template.New("").Funcs(templates.FuncMap()).Parse(templates.OrdersTemplate))
 	var out bytes.Buffer
 
-	tmpl.Execute(&out, ot)
+	tmpl.Execute(&out, ow)
 	output := out.String()
 
 	return output, nil

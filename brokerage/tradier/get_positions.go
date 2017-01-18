@@ -2,7 +2,6 @@ package tradier
 
 import (
 	"bytes"
-	"log"
 	"text/template"
 
 	"github.com/calvn/brokr/brokerage/tradier/templates"
@@ -13,8 +12,6 @@ func (b *Brokerage) GetPositions() (string, error) {
 	if err != nil {
 		return "", err
 	}
-
-	log.Println(*(*positions)[0].CostBasis)
 
 	tmpl := template.Must(template.New("").Funcs(templates.FuncMap()).Parse(templates.PositionsTemplate))
 	var out bytes.Buffer
