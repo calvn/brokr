@@ -46,15 +46,22 @@ func newConfigCmd() *cobra.Command {
 		SilenceErrors: true,
 	}
 	cmd.Flags().StringVarP(&accessToken, "token", "t", "", "Tradier access token, required")
-	viper.BindPFlag("access_token", cmd.Flags().Lookup("token"))
+	viper.BindPFlag("tradier.access_token", cmd.Flags().Lookup("token"))
+
+	cmd.AddCommand(
+		newConfigTradierCmd(),
+	)
 
 	return cmd
 }
 
 // TODO: If config file exist, merge with it
 func configCmdFunc(cmd *cobra.Command, args []string) {
+	// Instantiate a new *config.Config from viper config
+	// This includes configuration from existing viper data
 	cfg := config.New(viper.GetViper())
 
+	// Marshal config into YAML
 	data, err := yaml.Marshal(cfg)
 	if err != nil {
 		fmt.Println(err)
@@ -67,6 +74,7 @@ func configCmdFunc(cmd *cobra.Command, args []string) {
 
 	filePath := filepath.Join(home, defaultConfigName)
 
+	// Write config to file
 	err = ioutil.WriteFile(filePath, data, 0644)
 	if err != nil {
 		fmt.Println(err)
@@ -79,11 +87,16 @@ func configCmdFunc(cmd *cobra.Command, args []string) {
 // Check for required flags, reads from viper
 func configPreRunEFunc(cmd *cobra.Command, args []string) error {
 	t := viper.GetString("tradier.access_token")
+	if len(t) == 0 {
+		return fmt.Errorf("Not access token found.")
+	}
+
 	mergedConfig.Tradier.AccessToken = t
 
 	if mergedConfig.Tradier.AccessToken == "" {
 		return fmt.Errorf("No access token provided.")
 	}
+	// log.Println(cmd.Flag("token").Value.String())
 
 	return nil
 }

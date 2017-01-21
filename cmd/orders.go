@@ -22,10 +22,11 @@ import (
 
 func newOrdersCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "orders",
-		Short: "Get pending orders for an account",
-		Long:  `Get pending orders for an account`,
-		RunE:  ordersCmdFunc,
+		Use:          "orders",
+		Short:        "Get pending orders for an account",
+		Long:         `Get pending orders for an account`,
+		RunE:         ordersCmdFunc,
+		SilenceUsage: true,
 	}
 
 	return cmd

@@ -142,8 +142,8 @@ Laundry list
 Should there be only buy/sell on orders? For instance, *sell short* turns into *sell* if there is a long position in the account. Same with *buy-to-cover* into *buy*. It will need to make an additional call in this case to make sure that there is an existing position in the account (possibly through preview).
 
 ## cli behavior
-- [ ] Interactive/continuous command
-- [ ] better error handling other than using `fmt.Println()`
+- [ ] Interactive/continuous command (brokrd)
+- [x] better error handling other than using `fmt.Println()`
 
 ## docs
 - [ ] Write up docs for usage

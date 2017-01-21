@@ -16,26 +16,36 @@ type Config struct {
 
 // TradierConfig holds the configuration for Tradier brokerage
 type TradierConfig struct {
-	AccountID   string `yaml:"account_id,omitempty"`
+	AccountID   string `yaml:"account,omitempty"`
 	AccessToken string `yaml:"access_token,omitempty"`
 }
 
 // New creates a new config from Viper object
 func New(v *viper.Viper) *Config {
+	brokerage := v.GetString("brokerage")
+
 	config := &Config{
-		Brokerage:    v.GetString("brokerage"),
+		Brokerage:    brokerage,
 		PreviewOrder: v.GetBool("preview_order"),
 	}
 
-	// Handle tradier config if it exists
-	if len(v.GetStringMap("tradier")) != 0 {
-		tc := &TradierConfig{
-			AccountID:   v.GetString("tradier.account_id"),
+	switch brokerage {
+	case "tradier":
+		config.Tradier = &TradierConfig{
+			AccountID:   v.GetString("tradier.account"),
 			AccessToken: v.GetString("tradier.access_token"),
 		}
-
-		config.Tradier = tc
 	}
+
+	// Handle tradier config if it exists
+	// if len(v.GetStringMap("tradier")) != 0 {
+	// 	tc := &TradierConfig{
+	// 		AccountID:   v.GetString("tradier.account_id"),
+	// 		AccessToken: v.GetString("tradier.access_token"),
+	// 	}
+	//
+	// 	config.Tradier = tc
+	// }
 
 	return config
 }
