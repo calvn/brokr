@@ -28,7 +28,8 @@ import (
 	"github.com/spf13/viper"
 )
 
-var accessToken string
+var brokerageFlag string
+var previewConfigFlag bool
 
 const (
 	defaultConfigPath = "$HOME"
@@ -45,8 +46,10 @@ func newConfigCmd() *cobra.Command {
 		PreRunE:       configPreRunEFunc,
 		SilenceErrors: true,
 	}
-	cmd.Flags().StringVarP(&accessToken, "token", "t", "", "Tradier access token, required")
-	viper.BindPFlag("tradier.access_token", cmd.Flags().Lookup("token"))
+	cmd.Flags().StringVarP(&brokerageFlag, "brokerage", "b", "", "Brokerage to use.")
+	viper.BindPFlag("brokerage", cmd.Flags().Lookup("brokerage"))
+	cmd.Flags().BoolVarP(&previewConfigFlag, "preview", "p", true, "Enable or disable order preview.")
+	viper.BindPFlag("preview_order", cmd.Flags().Lookup("preview"))
 
 	cmd.AddCommand(
 		newConfigTradierCmd(),

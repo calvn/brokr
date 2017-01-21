@@ -67,11 +67,9 @@ func sellCmdFunc(cmd *cobra.Command, args []string) error {
 		triggerPrice, _ = strconv.ParseFloat(args[3], 64)
 	}
 
-	if !previewFlag && viper.IsSet("preview_order") {
-		previewFlag = viper.GetBool("preview_order")
-	}
+	isPreview := viper.GetBool("preview_order") || previewFlag
 
-	output, err := brokrRunner.CreateOrder(previewFlag, "equity", symbol, durationFlag, "sell", q, orderType, triggerPrice)
+	output, err := brokrRunner.CreateOrder(isPreview, "equity", symbol, durationFlag, "sell", q, orderType, triggerPrice)
 	if err != nil {
 		return err
 	}

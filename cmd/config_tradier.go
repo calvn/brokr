@@ -28,6 +28,11 @@ import (
 	"github.com/spf13/viper"
 )
 
+var (
+	accessTokenFlag string
+	accountFlag     string
+)
+
 func newConfigTradierCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "tradier",
@@ -36,10 +41,10 @@ func newConfigTradierCmd() *cobra.Command {
 		RunE:  configTradierCmdFunc,
 	}
 
-	cmd.Flags().StringVarP(&accessToken, "token", "t", "", "Tradier access token, required")
+	cmd.Flags().StringVarP(&accessTokenFlag, "token", "t", "", "Tradier access token, required if not set")
 	viper.BindPFlag("tradier.access_token", cmd.Flags().Lookup("token"))
 
-	cmd.Flags().StringVarP(&accessToken, "account", "a", "", "Tradier access token, required")
+	cmd.Flags().StringVarP(&accountFlag, "account", "a", "", "Tradier access token, required if not set")
 	viper.BindPFlag("tradier.account", cmd.Flags().Lookup("account"))
 
 	return cmd

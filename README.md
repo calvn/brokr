@@ -18,8 +18,9 @@ Compiled binaries will be available once brokr is in a relatively stable release
 
 ## Getting started
 
-To get started, configure brokr using `brokr config tradier --account <ACCOUNT ID> --token <ACCESS TOKEN>`. Your `.brokr.yaml` will look something like this:
+To get started, configure brokr using `brokr config tradier --account <ACCOUNT ID> --token <ACCESS TOKEN>`.
 
+Your `.brokr.yaml` will look something like this:
 ```yml
 brokerage: tradier
 preview_order: true
@@ -28,13 +29,16 @@ tradier:
   access_token: <ACCESS TOKEN>
 ```
 
-After tradier configuration has been set, you can start interacting with your account.
+After Tradier configuration has been set, you can start interacting with your account.
 
 ### Sane defaults
 
-Since brokr currently only supports Tradier, it will be brokr's default brokerage.
+brokr will set sane defaults if none are passed in via `brokr config`.
 
-brokr will also set `preview_order` to `true` to avoid accidental order placement.
+| Setting       | Value    |
+|---------------|----------|
+| brokerage     | tradier  |
+| preview_order | true     |
 
 
 ## Limitations
@@ -46,7 +50,7 @@ brokr currently does not have short-sell and buy-to-cover implemented. This feat
 
 ## Contributing
 
-Contributions are always welcomed. To contribute, fork the repository, make the necessary changes, and send in a pull request back to master. Opening an accompanied issue is strongly recommended.
+Contributions are always welcomed. To contribute, fork the repository, make the necessary changes, and send in a pull request back to master. Opening an accompanying issue is strongly recommended.
 
 ### Development dependencies
 
