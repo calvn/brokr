@@ -17,8 +17,8 @@ package cmd
 import (
 	"os"
 	"runtime"
+	"text/template"
 
-	"github.com/alecthomas/template"
 	"github.com/calvn/brokr/buildtime"
 	"github.com/spf13/cobra"
 )
