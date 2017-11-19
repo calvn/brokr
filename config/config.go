@@ -8,10 +8,12 @@ import (
 
 // Config holds the merged configuration from the config file, environment variables, and flags
 type Config struct {
-	Brokerage    string `yaml:"brokerage"`
-	PreviewOrder bool   `yaml:"preview_order"`
+	// General configuration
+	PreviewOrder bool `yaml:"preview_order"`
 
-	Tradier *TradierConfig `yaml:"tradier,omitempty"`
+	// Account configuration
+	Brokerage string         `yaml:"brokerage"`
+	Tradier   *TradierConfig `yaml:"tradier,omitempty"`
 }
 
 // TradierConfig holds the configuration for Tradier brokerage
@@ -61,4 +63,13 @@ func (c *Config) CheckConfig() error {
 	}
 
 	return nil
+}
+
+// Copy returns a copy of the configuration
+func (c *Config) Copy() *Config {
+	if c == nil {
+		return nil
+	}
+	cp := *c
+	return &cp
 }

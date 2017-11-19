@@ -32,7 +32,7 @@ func (b *Brokerage) CreateOrder(preview bool, class, symbol, duration, side stri
 		return "", err
 	}
 
-	// If not a previerw, return the order details
+	// If not a preview, return the order details
 	if !params.Preview {
 		id := strconv.Itoa(*order.ID)
 		return b.GetOrder(id)

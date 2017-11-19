@@ -6,6 +6,7 @@ import (
 
 	"github.com/calvn/brokr/brokerage/tradier/structs"
 	"github.com/calvn/brokr/brokerage/tradier/templates"
+	"github.com/calvn/go-tradier/tradier"
 )
 
 func (b *Brokerage) GetPositions() (string, error) {
@@ -18,9 +19,13 @@ func (b *Brokerage) GetPositions() (string, error) {
 	for i, p := range *positions {
 		symbols[i] = *p.Symbol
 	}
-	quotes, _, err := b.client.Markets.Quotes(symbols)
-	if err != nil {
-		return "", err
+
+	var quotes *tradier.Quotes
+	if len(symbols) > 0 {
+		quotes, _, err = b.client.Markets.Quotes(symbols)
+		if err != nil {
+			return "", err
+		}
 	}
 
 	pw := structs.NewPositionsWrapper(positions, quotes)

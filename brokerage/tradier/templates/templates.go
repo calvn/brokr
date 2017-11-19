@@ -14,15 +14,15 @@ Symbol: {{.Symbol}}
 {{- end}}
 {{- end}}`
 
-	OrderTemplate = `{{rpad "ID" 10}}{{rpad "SYMBOL" 10}}{{rpad "SIDE" 10}}{{rpad "TYPE" 10}}{{rpad "DURATION" 10}}{{rpad "STATUS" 10}}FILLED/QTY
-{{rpad (stringify .ID) 10}}{{rpad (stringify .Symbol) 10}}{{rpad (stringify .Side) 10}}{{rpad (stringify .Type) 10}}{{rpad (stringify .Duration) 10}}{{rpad (stringify .Status) 10}}{{.Filled}}/{{.Quantity}}`
+	OrderTemplate = `{{rpad "ID" 10}}{{rpad "SYMBOL" 10}}{{rpad "SIDE" 15}}{{rpad "TYPE" 10}}{{rpad "DURATION" 10}}{{rpad "STATUS" 10}}FILLED/QTY
+{{rpad (stringify .ID) 10}}{{rpad (stringify .Symbol) 10}}{{rpad (stringify .Side) 15}}{{rpad (stringify .Type) 10}}{{rpad (stringify .Duration) 10}}{{rpad (stringify .Status) 10}}{{.Filled}}/{{.Quantity}}`
 
-	OrderPreviewTemplate = `{{rpad "SYMBOL" 10}}{{rpad "SIDE" 10}}{{rpad "TYPE" 10}}{{rpad "DURATION" 10}}{{rpad "COMM./COST" 15}}EST. TOTAL
-{{rpad (stringify .Symbol) 10}}{{rpad (stringify .Side) 10}}{{rpad (stringify .Type) 10}}{{rpad (stringify .Duration) 10}}{{rpad (printf "%s/%s" (stringify .Commission) (stringify .OrderCost)) 15}}{{stringify .Cost}}`
+	OrderPreviewTemplate = `{{rpad "SYMBOL" 10}}{{rpad "SIDE" 15}}{{rpad "TYPE" 10}}{{rpad "DURATION" 10}}{{rpad "COMM./COST" 15}}EST. TOTAL
+{{rpad (stringify .Symbol) 10}}{{rpad (stringify .Side) 15}}{{rpad (stringify .Type) 10}}{{rpad (stringify .Duration) 10}}{{rpad (printf "%s/%s" (stringify .Commission) (stringify .OrderCost)) 15}}{{stringify .Cost}}`
 
-	OrdersTemplate = `{{rpad "ID" 10}}{{rpad "SYMBOL" 10}}{{rpad "SIDE" 10}}{{rpad "TYPE" 10}}{{rpad "DURATION" 10}}{{rpad "STATUS" 10}}FILLED/QTY
+	OrdersTemplate = `{{rpad "ID" 10}}{{rpad "SYMBOL" 10}}{{rpad "SIDE" 15}}{{rpad "TYPE" 10}}{{rpad "DURATION" 10}}{{rpad "STATUS" 10}}FILLED/QTY
 {{- range .}}
-{{rpad (stringify .ID) 10}}{{rpad (stringify .Symbol) 10}}{{rpad (stringify .Side) 10}}{{rpad (stringify .Type) 10}}{{rpad (stringify .Duration) 10}}{{rpad (stringify .Status) 10}}{{.Filled}}/{{.Quantity}}
+{{rpad (stringify .ID) 10}}{{rpad (stringify .Symbol) 10}}{{rpad (stringify .Side) 15}}{{rpad (stringify .Type) 10}}{{rpad (stringify .Duration) 10}}{{rpad (stringify .Status) 10}}{{.Filled}}/{{.Quantity}}
 {{- end}}`
 
 	PositionsTemplate = `{{rpad "ID" 10}}{{rpad "SYMBOL" 10}}{{rpad "QUANTITY" 10}}{{rpad "LAST" 10}}{{rpad "CHANGE (%)" 18}}{{rpad "VALUE" 12}}{{rpad "BASIS" 12}}GL (%)

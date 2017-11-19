@@ -34,7 +34,10 @@ func newInfoCmd() *cobra.Command {
 }
 
 func infoCmdFunc(cmd *cobra.Command, args []string) error {
-	output, err := yaml.Marshal(&mergedConfig)
+	config := mergedConfig.Copy()
+	config.Tradier.AccessToken = "<hidden>"
+
+	output, err := yaml.Marshal(config)
 	if err != nil {
 		return err
 	}
