@@ -15,13 +15,6 @@ test: generate
 		| xargs -n1 go test -v -timeout=60s $(TESTARGS)
 .PHONY: test
 
-generate:
-	@echo " ==> Generating..."
-	@find . -type f -name '.DS_Store' -delete
-	@go list ./... \
-		| grep -v "/vendor/" \
-		| xargs -n1 go generate $(PACKAGES)
-.PHONY: generate
 
 
 clean:
@@ -29,7 +22,7 @@ clean:
 	@rm -rf bin && mkdir -p bin
 .PHONY: clean
 	
-build: generate clean
+build: clean
 	@echo " ==> Building..."
 	@go build -ldflags " \
 		-X github.com/calvn/brokr/buildtime.Version=${BROKR_VERSION} \
