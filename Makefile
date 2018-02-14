@@ -24,21 +24,36 @@ generate:
 .PHONY: generate
 
 
-build: generate
+clean:
 	@echo " ==> Cleaning up old directory..."
 	@rm -rf bin && mkdir -p bin
+.PHONY: clean
+	
+build: generate clean
 	@echo " ==> Building..."
 	@go build -ldflags " \
 		-X github.com/calvn/brokr/buildtime.Version=${BROKR_VERSION} \
 		-X github.com/calvn/brokr/buildtime.GitCommit=${GIT_COMMIT}${GIT_DIRTY} \
 		-X 'github.com/calvn/brokr/buildtime.BuildDate=${BUILD_DATE}' \
 		" -o bin/brokr .
-	@echo " ==> Installing..."
-	@cp bin/brokr $(GOPATH)/bin
 .PHONY: build
+
+build-windows: generate clean
+	@echo " ==> Building..."
+	@GOOS=windows GOARCH=amd64 go build -ldflags " \
+		-X github.com/calvn/brokr/buildtime.Version=${BROKR_VERSION} \
+		-X github.com/calvn/brokr/buildtime.GitCommit=${GIT_COMMIT}${GIT_DIRTY} \
+		-X 'github.com/calvn/brokr/buildtime.BuildDate=${BUILD_DATE}' \
+		" -o bin/brokr.exe .
+.PHONY: build-windows
 
 build-linux: create-build-image remove-dangling build-native
 .PHONY: build-linux
+
+install: generate clean build
+	@echo " ==> Installing..."
+	@cp bin/brokr $(GOPATH)/bin
+.PHONY: install
 
 generate-gif:
 	@echo "To generate the GIF from asciicast file, get https://github.com/pettarin/asciicast2gif and then run:"
