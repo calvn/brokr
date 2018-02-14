@@ -8,7 +8,7 @@ BUILD_DATE=$(shell date)
 
 default: test
 
-test: generate
+test:
 	@echo " ==> Running tests..."
 	@go list $(TEST) \
 		| grep -v "/vendor/" \
@@ -31,7 +31,7 @@ build: clean
 		" -o bin/brokr .
 .PHONY: build
 
-build-windows: generate clean
+build-windows: clean
 	@echo " ==> Building..."
 	@GOOS=windows GOARCH=amd64 go build -ldflags " \
 		-X github.com/calvn/brokr/buildtime.Version=${BROKR_VERSION} \
@@ -43,7 +43,7 @@ build-windows: generate clean
 build-linux: create-build-image remove-dangling build-native
 .PHONY: build-linux
 
-install: generate clean build
+install: clean build
 	@echo " ==> Installing..."
 	@cp bin/brokr $(GOPATH)/bin
 .PHONY: install
